@@ -45,6 +45,22 @@ body {
   font-family: "Noto Sans Myanmar", Inter, sans-serif;
 }
 
+.copy {
+  line-height: 1.65;
+}
+
+html[lang="my"] :where(h1, h2, h3, h4) {
+  line-height: 1.5;
+  padding-top: 0.12em;
+  padding-bottom: 0.28em;
+}
+
+html[lang="my"] :where(p, li, td, th, label, dd, dt, legend, figcaption) {
+  line-height: 1.75;
+  padding-top: 0.12em;
+  padding-bottom: 0.28em;
+}
+
 .page-shell {
   width: min(var(--page-max), calc(100% - var(--page-pad) * 2));
   margin-inline: auto;
@@ -53,18 +69,53 @@ body {
 .hero-band {
   position: relative;
   isolation: isolate;
+  overflow: hidden;
+  --hero-px: 0;
+  --hero-py: 0;
 }
 
 .hero-pattern {
   pointer-events: none;
   position: absolute;
-  inset: 0;
+  inset: -10%;
   z-index: -1;
   background-image:
-    radial-gradient(ellipse 70% 55% at 82% 42%, color-mix(in srgb, var(--color-mint-wash) 88%, transparent), transparent 70%),
-    radial-gradient(ellipse 50% 40% at 8% 18%, color-mix(in srgb, var(--color-gold-soft) 42%, transparent), transparent 68%),
-    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--color-primary) 22%, transparent) 1px, transparent 0);
-  background-size: auto, auto, 26px 26px;
+    radial-gradient(
+      ellipse 70% 55% at 82% 42%,
+      color-mix(in srgb, var(--color-mint-wash) 88%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 8% 18%,
+      color-mix(in srgb, var(--color-gold-soft) 42%, transparent),
+      transparent 68%
+    );
+  transform: translate3d(calc(var(--hero-px) * 20px), calc(var(--hero-py) * 14px), 0);
+}
+
+.hero-dots {
+  position: absolute;
+  inset: -48px;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    color-mix(in srgb, var(--color-primary) 22%, transparent) 1px,
+    transparent 0
+  );
+  background-size: 26px 26px;
+  transform: translate3d(calc(var(--hero-px) * -28px), calc(var(--hero-py) * -20px), 0);
+}
+
+.hero-copy :is(h1, p) {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+html[lang="my"] .hero-copy h1 {
+  line-height: 1.12;
+}
+
+html[lang="my"] .hero-copy p {
+  line-height: 1.6;
 }
 
 .hero-visual {
@@ -73,9 +124,30 @@ body {
 
 .hero-photo {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: contain;
+  object-position: center;
   display: block;
+  filter: drop-shadow(0 18px 40px color-mix(in srgb, var(--color-stage) 18%, transparent));
+}
+
+@media (min-width: 1024px) {
+  .hero-visual {
+    width: calc(100% + clamp(16px, 3.5vw, 40px));
+    margin-right: calc(clamp(16px, 3.5vw, 40px) * -1);
+  }
+}
+
+.hero-cta {
+  animation: hero-cta-glow 2.8s ease-in-out infinite;
+}
+
+.hero-cta:hover {
+  animation: none;
+  box-shadow:
+    0 0 36px 8px color-mix(in srgb, var(--color-gold) 48%, transparent),
+    0 12px 30px color-mix(in srgb, var(--color-primary) 28%, transparent);
 }
 
 .reveal {
@@ -115,8 +187,14 @@ body {
     transition: none;
   }
 
-  .stage-drift {
+  .stage-drift,
+  .hero-cta {
     animation: none !important;
+  }
+
+  .hero-pattern,
+  .hero-dots {
+    transform: none !important;
   }
 }
 
@@ -134,6 +212,44 @@ body {
 
 .stage-drift {
   animation: stage-drift 12s ease-in-out infinite;
+}
+
+@keyframes hero-cta-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 22px 2px color-mix(in srgb, var(--color-gold) 42%, transparent),
+      0 8px 22px color-mix(in srgb, var(--color-stage) 16%, transparent);
+  }
+  50% {
+    box-shadow:
+      0 0 40px 8px color-mix(in srgb, var(--color-gold) 58%, transparent),
+      0 12px 32px color-mix(in srgb, var(--color-primary) 30%, transparent);
+  }
+}
+
+.modal-scrim {
+  background: color-mix(in srgb, var(--color-stage) 62%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.product-video-frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1880 / 966;
+  background: var(--color-surface);
+}
+
+.product-video-frame video {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(100% * 1920 / 1880);
+  height: calc(100% * 1080 / 966);
+  max-width: none;
+  object-fit: fill;
+  background: var(--color-surface);
 }
 
 ::selection {

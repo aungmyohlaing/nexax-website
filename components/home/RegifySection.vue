@@ -8,7 +8,7 @@
         <h2 class="reveal reveal-delay-1 mt-3 font-heading font-bold text-[32px] md:text-[44px] leading-tight">
           {{ t("regify.title") }}
         </h2>
-        <p class="reveal reveal-delay-1 mt-4 font-body text-[16px] leading-7 text-[color:var(--color-text-soft)] max-w-md">
+        <p class="reveal reveal-delay-1 mt-4 font-body text-[16px] leading-7 text-[color:var(--color-text-soft)] max-w-xl">
           {{ t("regify.lead") }}
         </p>
 
@@ -43,19 +43,23 @@
         <p class="mt-4 font-body text-[15px] leading-7 text-[color:var(--color-text)]">
           {{ t("regify.body") }}
         </p>
-        <NuxtLink
-          to="/regify"
+        <a
+          :href="SITE.regifyUrl"
+          target="_blank"
+          rel="noopener noreferrer"
           class="mt-6 inline-flex items-center gap-2 font-body font-semibold text-[15px] text-[color:var(--color-text)] hover:text-[color:var(--color-stage)]"
         >
           {{ t("regify.cta") }}
           <Icon name="ArrowRight" :size="16" />
-        </NuxtLink>
+        </a>
       </article>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
+import { SITE } from "~/constants/site"
+
 const { t } = useLocale()
 
 const items = ["campaigns", "submissions", "events"] as const

@@ -16,40 +16,35 @@ function getByPath(source: Messages, path: string): string {
   return typeof value === "string" ? value : path
 }
 
-function readCookieLocale(): Locale | null {
-  if (!import.meta.client) return null
-  const match = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith(`${SITE.localeCookie}=`))
-  const value = match?.split("=")[1]
+export function parseLocale(value: unknown): Locale | null {
   return value === "en" || value === "my" ? value : null
 }
 
-function writeCookieLocale(locale: Locale) {
-  if (!import.meta.client) return
-  document.cookie = `${SITE.localeCookie}=${locale}; path=/; max-age=31536000; SameSite=Lax`
+function useLocaleCookie() {
+  return useCookie<string | null>(SITE.localeCookie, {
+    default: () => null,
+    maxAge: 31536000,
+    path: "/",
+    sameSite: "lax",
+  })
 }
 
 export function useLocale() {
-  const locale = useState<Locale>("locale", () => "en")
+  const localeCookie = useLocaleCookie()
+  const locale = useState<Locale>(
+    "locale",
+    () => parseLocale(localeCookie.value) ?? "en",
+  )
 
   const t = (path: string) => getByPath(messages[locale.value], path)
 
   const setLocale = (next: Locale) => {
     locale.value = next
-    writeCookieLocale(next)
+    localeCookie.value = next
     if (import.meta.client) {
       document.documentElement.lang = next === "my" ? "my" : "en"
     }
   }
 
-  const hydrateLocale = () => {
-    const saved = readCookieLocale()
-    if (saved) setLocale(saved)
-    else if (import.meta.client) {
-      document.documentElement.lang = locale.value === "my" ? "my" : "en"
-    }
-  }
-
-  return { locale, t, setLocale, hydrateLocale }
+  return { locale, t, setLocale }
 }

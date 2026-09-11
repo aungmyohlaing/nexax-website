@@ -1,12 +1,13 @@
 <template>
   <div>
-    <HeroSection @see-work="onSeeWork" />
+    <HeroSection />
     <FlagshipErpSection />
     <ErpTeaserSection />
     <ErpWorkflowSection />
     <ErpProductCtaSection />
     <ClientProofSection />
     <RegifySection />
+    <WhyWeBuildSection />
     <HowWeBuildSection />
     <WhatsNextSection />
   </div>
@@ -23,9 +24,4 @@ useHead(() => ({
   },
   meta: [{ name: "description", content: t("meta.description") }],
 }))
-
-const onSeeWork = () => {
-  if (!import.meta.client) return
-  document.getElementById("erp")?.scrollIntoView({ behavior: "smooth" })
-}
 </script>

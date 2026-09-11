@@ -9,62 +9,140 @@
       <p class="font-body text-[12px] font-semibold tracking-[0.14em] uppercase text-[color:var(--color-gold)]">
         {{ t("erp.modules") }}
       </p>
-      <div class="stage-drift mt-4 rounded-[24px] bg-[color:var(--color-surface)] min-h-[220px] md:min-h-[280px] flex items-center justify-center px-6 py-16">
-        <div class="text-center">
-          <span class="mx-auto mb-4 h-12 w-12 rounded-full border border-[color:var(--color-stage)/0.16] flex items-center justify-center text-[color:var(--color-stage)] group-hover:bg-[color:var(--color-stage)] group-hover:text-[color:var(--color-on-dark)] transition-colors">
+      <div class="product-video-frame mt-4 overflow-hidden rounded-[24px]">
+        <video
+          :src="SITE.erpVideoUrl"
+          muted
+          playsinline
+          preload="metadata"
+        />
+        <span class="absolute inset-0 flex items-center justify-center bg-[color:color-mix(in_srgb,var(--color-stage)_0%,transparent)] group-hover:bg-[color:color-mix(in_srgb,var(--color-stage)_28%,transparent)] transition-colors">
+          <span class="h-12 w-12 rounded-full bg-[color:var(--color-surface)] text-[color:var(--color-stage)] flex items-center justify-center shadow-card">
             <Icon name="Play" :size="18" />
           </span>
-          <p class="font-body text-[14px] md:text-[15px] text-[color:var(--color-text-soft)]">
-            {{ t("erp.visualHint") }}
-          </p>
-        </div>
+        </span>
       </div>
     </button>
 
-    <div
-      v-if="open"
-      class="fixed inset-0 z-50 bg-[color:var(--color-stage)/0.72] flex items-center justify-center p-4"
-      @click.self="open = false"
-    >
-      <div class="w-full max-w-3xl rounded-[28px] bg-[color:var(--color-stage)] text-[color:var(--color-on-dark)] p-6 md:p-10">
-        <div class="flex items-start justify-between gap-4">
-          <div>
-            <p class="font-body text-[12px] tracking-[0.16em] uppercase text-[color:var(--color-gold)]">
-              {{ t("erp.visualLabel") }}
-            </p>
-            <h2 class="mt-3 font-heading font-bold text-[28px] md:text-[36px]">
-              {{ t("video.title") }}
-            </h2>
+    <Teleport to="body">
+      <div
+        v-if="open"
+        class="fixed inset-0 z-[80] flex items-center justify-center p-4 md:p-8"
+        role="dialog"
+        aria-modal="true"
+        :aria-labelledby="titleId"
+        :aria-describedby="bodyId"
+      >
+        <button
+          type="button"
+          class="modal-scrim absolute inset-0 cursor-default"
+          tabindex="-1"
+          :aria-label="t('video.close')"
+          @click="open = false"
+        />
+        <div class="relative w-full max-w-4xl overflow-hidden rounded-[28px] bg-[color:var(--color-surface)] text-[color:var(--color-text)] shadow-card">
+          <div class="flex items-start justify-between gap-4 px-5 pt-5 md:px-6 md:pt-6">
+            <div>
+              <p class="font-body text-[12px] font-semibold tracking-[0.16em] uppercase text-[color:var(--color-gold)]">
+                {{ t("erp.visualLabel") }}
+              </p>
+              <h2
+                :id="titleId"
+                class="mt-2 font-heading font-bold text-[24px] md:text-[32px] leading-tight"
+              >
+                {{ t("video.title") }}
+              </h2>
+              <p :id="bodyId" class="sr-only">
+                {{ t("video.body") }}
+              </p>
+            </div>
+            <button
+              ref="closeRef"
+              type="button"
+              class="h-10 w-10 shrink-0 rounded-full bg-[color:var(--color-mint-wash)] text-[color:var(--color-text)] flex items-center justify-center hover:bg-[color:var(--color-stage)] hover:text-[color:var(--color-on-dark)] transition-colors"
+              :aria-label="t('video.close')"
+              @click="open = false"
+            >
+              <Icon name="X" :size="18" />
+            </button>
           </div>
-          <button
-            type="button"
-            class="h-10 w-10 flex items-center justify-center"
-            :aria-label="t('video.close')"
-            @click="open = false"
-          >
-            <Icon name="X" :size="20" />
-          </button>
-        </div>
-        <div class="mt-8 aspect-video rounded-[20px] bg-[color:var(--color-stage-soft)] flex items-center justify-center">
-          <p class="font-body text-[16px] text-[color:var(--color-on-dark-soft)] px-6 text-center">
-            {{ t("video.body") }}
-          </p>
+          <div class="px-5 pb-5 md:px-6 md:pb-6">
+            <div class="product-video-frame mt-5 overflow-hidden rounded-[20px]">
+              <video
+                ref="modalRef"
+                class="product-modal-video"
+                :src="SITE.erpVideoUrl"
+                playsinline
+                preload="metadata"
+                @click="togglePlay"
+                @play="playing = true"
+                @pause="playing = false"
+                @ended="playing = false"
+              />
+              <button
+                v-show="!playing"
+                type="button"
+                class="absolute inset-0 z-[1] flex items-center justify-center bg-[color:color-mix(in_srgb,var(--color-stage)_18%,transparent)]"
+                :aria-label="t('erp.play')"
+                @click="togglePlay"
+              >
+                <span class="h-14 w-14 rounded-full bg-[color:var(--color-surface)] text-[color:var(--color-stage)] flex items-center justify-center shadow-card">
+                  <Icon name="Play" :size="20" />
+                </span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
+import { SITE } from "~/constants/site"
+
 const { t } = useLocale()
 const open = ref(false)
+const playing = ref(false)
+const closeRef = ref<HTMLButtonElement | null>(null)
+const modalRef = ref<HTMLVideoElement | null>(null)
+const titleId = "erp-preview-title"
+const bodyId = "erp-preview-body"
 
-watch(open, (value) => {
+const onKeydown = (event: KeyboardEvent) => {
+  if (event.key === "Escape") open.value = false
+}
+
+const togglePlay = async () => {
+  const video = modalRef.value
+  if (!video) return
+  if (video.paused) {
+    await video.play()
+    return
+  }
+  video.pause()
+}
+
+watch(open, async (value) => {
   if (!import.meta.client) return
   document.body.style.overflow = value ? "hidden" : ""
+  if (value) {
+    window.addEventListener("keydown", onKeydown)
+    await nextTick()
+    closeRef.value?.focus()
+    return
+  }
+  window.removeEventListener("keydown", onKeydown)
+  playing.value = false
+  if (modalRef.value) {
+    modalRef.value.pause()
+    modalRef.value.currentTime = 0
+  }
 })
 
 onBeforeUnmount(() => {
-  if (import.meta.client) document.body.style.overflow = ""
+  if (!import.meta.client) return
+  window.removeEventListener("keydown", onKeydown)
+  document.body.style.overflow = ""
 })
 </script>

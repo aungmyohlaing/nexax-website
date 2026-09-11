@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { SITE } from "./constants/site"
+
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: false },
@@ -11,10 +13,13 @@ export default defineNuxtConfig({
     },
   ],
   ssr: true,
+  routeRules: {
+    "/regify": { redirect: { to: SITE.regifyUrl, statusCode: 301 } },
+  },
   nitro: {
     prerender: {
       crawlLinks: true,
-      routes: ["/", "/erp", "/regify"],
+      routes: ["/", "/erp"],
     },
   },
   app: {

@@ -9,19 +9,13 @@
           {{ t("clients.title") }}
         </h2>
       </div>
-      <article class="reveal reveal-delay-1 rounded-[28px] bg-[color:var(--color-stage-soft)] px-7 py-8 md:px-9 md:py-10">
-        <p class="font-body text-[13px] font-semibold tracking-[0.12em] uppercase text-[color:var(--color-gold)]">
-          {{ t("clients.cardTitle") }}
+
+      <article class="reveal reveal-delay-1 rounded-[28px] bg-[color:var(--color-stage-soft)] px-7 py-8 md:px-10 md:py-12">
+        <p class="font-body italic font-normal text-[16px] md:text-[17px] leading-8 text-[color:var(--color-on-dark-soft)]">
+          “{{ t("clients.quote") }}”
         </p>
-        <p class="mt-4 font-body text-[16px] md:text-[17px] leading-8 text-[color:var(--color-on-dark-soft)]">
-          {{ t("clients.quote") }}
-        </p>
-        <p class="mt-4 font-body text-[14px] leading-7 text-[color:var(--color-on-dark-soft)]">
-          {{ t("clients.context") }}
-        </p>
-        <p class="mt-6 inline-flex items-center gap-2 font-body font-semibold text-[15px] text-[color:var(--color-gold)]">
-          {{ t("clients.link") }}
-          <Icon name="ArrowRight" :size="16" />
+        <p class="mt-8 font-body text-[13px] font-semibold tracking-[0.14em] uppercase text-[color:var(--color-gold)]">
+          {{ t("clients.signature") }}
         </p>
       </article>
     </div>

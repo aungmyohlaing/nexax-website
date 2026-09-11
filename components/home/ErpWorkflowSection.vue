@@ -16,15 +16,15 @@
       <ol class="reveal reveal-delay-2 mt-12 flex flex-col md:flex-row md:items-stretch gap-3 md:gap-2">
         <template v-for="(step, index) in steps" :key="step">
           <li
-            class="flex-1 rounded-[20px] px-4 py-5 text-center"
+            class="group flex-1 rounded-[20px] px-4 py-5 text-center transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:shadow-card hover:z-10 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
             :class="index === steps.length - 1
               ? 'bg-[color:var(--color-gold-soft)] text-[color:var(--color-text)]'
               : 'bg-[color:var(--color-surface)] text-[color:var(--color-text)]'"
-          >            
+          >
             <p class="mt-1 font-heading font-semibold text-[16px] md:text-[18px]">
               {{ t(`workflow.${step}`) }}
             </p>
-            <p class="font-body text-[12px] font-medium tracking-[0.04em] text-[color:var(--color-primary)]">
+            <p class="font-body text-[12px] font-medium tracking-[0.04em] text-[color:var(--color-primary)] transition-colors duration-200 group-hover:text-[color:var(--color-stage)]">
               {{ t(`workflow.${step}Status`) }}
             </p>
           </li>

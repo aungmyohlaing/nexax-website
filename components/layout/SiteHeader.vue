@@ -3,10 +3,10 @@
     <div class="page-shell flex items-center justify-between h-[76px] gap-4">
       <NuxtLink
         to="/"
-        class="font-heading font-bold text-[20px] tracking-tight text-[color:var(--color-text)]"
-        aria-label="NexaXTech"
+        class="shrink-0 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--color-bg)]"
+        :aria-label="SITE.fullName"
       >
-        NexaXTech
+        <BrandLockup />
       </NuxtLink>
 
       <nav class="hidden lg:flex items-center gap-8 font-body text-[15px] font-medium text-[color:var(--color-text)]">
@@ -36,13 +36,15 @@
                 <span class="block">{{ t("nav.erp") }}</span>
                 <span class="block text-[12px] text-[color:var(--color-gold)]">{{ t("nav.erpHint") }}</span>
               </NuxtLink>
-              <NuxtLink
-                to="/regify"
+              <a
+                :href="SITE.regifyUrl"
+                target="_blank"
+                rel="noopener noreferrer"
                 class="block rounded-[14px] px-4 py-3 hover:bg-[color:var(--color-mint-wash)] transition-colors"
                 @click="productsOpen = false"
               >
                 {{ t("nav.regify") }}
-              </NuxtLink>
+              </a>
             </div>
           </div>
         </div>
@@ -107,7 +109,14 @@
       class="fixed inset-0 z-50 bg-[color:var(--color-bg)] lg:hidden"
     >
       <div class="page-shell flex items-center justify-between h-[76px]">
-        <span class="font-heading font-bold text-[20px]">NexaXTech</span>
+        <NuxtLink
+          to="/"
+          class="shrink-0"
+          :aria-label="SITE.fullName"
+          @click="mobileOpen = false"
+        >
+          <BrandLockup />
+        </NuxtLink>
         <button
           type="button"
           class="h-10 w-10 flex items-center justify-center"
@@ -119,7 +128,12 @@
       </div>
       <nav class="page-shell flex flex-col gap-6 pt-8 font-body text-[20px] font-medium">
         <NuxtLink to="/erp" @click="mobileOpen = false">{{ t("nav.erp") }}</NuxtLink>
-        <NuxtLink to="/regify" @click="mobileOpen = false">{{ t("nav.regify") }}</NuxtLink>
+        <a
+          :href="SITE.regifyUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          @click="mobileOpen = false"
+        >{{ t("nav.regify") }}</a>
         <a href="/#clients" @click="mobileOpen = false">{{ t("nav.clients") }}</a>
         <a href="/#about" @click="mobileOpen = false">{{ t("nav.about") }}</a>
         <div class="flex items-center gap-3 text-[16px] text-[color:var(--color-text-soft)]">
@@ -137,6 +151,7 @@
 
 <script setup lang="ts">
 import type { Locale } from "~/types/locale"
+import { SITE } from "~/constants/site"
 
 const { t, locale, setLocale } = useLocale()
 const productsOpen = ref(false)

@@ -1,20 +1,30 @@
 <script setup lang="ts">
 import {
   ArrowRight,
+  Check,
   ChevronDown,
   ChevronRight,
   CircleHelp,
+  Facebook,
+  Mail,
   Menu,
+  MessageCircle,
+  Phone,
   Play,
   X,
 } from "lucide-vue-next"
 
 const icons = {
   ArrowRight,
+  Check,
   ChevronDown,
   ChevronRight,
   CircleHelp,
+  Facebook,
+  Mail,
   Menu,
+  MessageCircle,
+  Phone,
   Play,
   X,
 }

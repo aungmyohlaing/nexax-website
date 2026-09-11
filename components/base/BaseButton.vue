@@ -10,6 +10,8 @@
   <a
     v-else-if="href"
     :href="href"
+    :target="external ? '_blank' : undefined"
+    :rel="external ? 'noopener noreferrer' : undefined"
     :class="buttonClasses"
     @click="$emit('click')"
   >
@@ -32,12 +34,14 @@ interface Props {
   type?: "button" | "submit"
   to?: string
   href?: string
+  external?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   variant: "dark",
   size: "md",
   type: "button",
+  external: false,
 })
 
 defineEmits<{
