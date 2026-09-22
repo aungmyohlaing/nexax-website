@@ -228,6 +228,17 @@ html[lang="my"] .hero-copy p {
   }
 }
 
+.site-header {
+  background: color-mix(in srgb, var(--color-bg) 70%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: background-color 200ms ease;
+}
+
+.site-header.is-on-dark {
+  background: color-mix(in srgb, var(--color-stage) 64%, transparent);
+}
+
 .modal-scrim {
   background: color-mix(in srgb, var(--color-stage) 62%, transparent);
   backdrop-filter: blur(10px);

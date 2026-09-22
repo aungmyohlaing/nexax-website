@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-[color:var(--color-footer)] text-[color:var(--color-on-dark-soft)]">
+  <footer class="bg-[color:var(--color-footer)] text-[color:var(--color-on-dark-soft)]" data-nav-dark>
     <div class="page-shell py-12 md:py-16 flex flex-col gap-10">
       <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
         <div class="flex flex-col gap-4">

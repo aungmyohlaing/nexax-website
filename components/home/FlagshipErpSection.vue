@@ -1,6 +1,6 @@
 <template>
   <section id="erp" class="page-shell pb-16 md:pb-24 scroll-mt-24">
-    <div class="reveal rounded-[32px] bg-[color:var(--color-stage)] text-[color:var(--color-on-dark)] px-6 py-10 md:px-12 md:py-14 lg:px-16 lg:py-16">
+    <div class="reveal rounded-[32px] bg-[color:var(--color-stage)] text-[color:var(--color-on-dark)] px-6 py-10 md:px-12 md:py-14 lg:px-16 lg:py-16" data-nav-dark>
       <div class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div>
           <p class="font-body text-[12px] font-semibold tracking-[0.16em] uppercase text-[color:var(--color-gold)]">

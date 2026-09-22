@@ -9,7 +9,7 @@
       <p class="font-body text-[12px] font-semibold tracking-[0.14em] uppercase text-[color:var(--color-gold)]">
         {{ t("erp.modules") }}
       </p>
-      <div class="product-video-frame mt-4 overflow-hidden rounded-[24px]">
+      <div class="product-video-frame mt-4 overflow-hidden rounded-[24px] border border-[color:var(--color-border)]">
         <video
           :src="SITE.erpVideoUrl"
           muted
@@ -67,7 +67,7 @@
             </button>
           </div>
           <div class="px-5 pb-5 md:px-6 md:pb-6">
-            <div class="product-video-frame mt-5 overflow-hidden rounded-[20px]">
+            <div class="product-video-frame mt-5 overflow-hidden rounded-[20px] border border-[color:var(--color-border)]">
               <video
                 ref="modalRef"
                 class="product-modal-video"

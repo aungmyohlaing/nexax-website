@@ -1,5 +1,5 @@
 <template>
-  <section id="clients" class="bg-[color:var(--color-stage)] text-[color:var(--color-on-dark)] scroll-mt-24">
+  <section id="clients" class="bg-[color:var(--color-stage)] text-[color:var(--color-on-dark)] scroll-mt-24" data-nav-dark>
     <div class="page-shell py-16 md:py-24 grid gap-10 lg:grid-cols-2 lg:items-center">
       <div>
         <p class="reveal font-body text-[12px] font-semibold tracking-[0.16em] uppercase text-[color:var(--color-gold)]">

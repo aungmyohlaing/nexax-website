@@ -1,0 +1,19 @@
+# Website Docker — local smoke test before Cloud Run
+#
+#   docker compose up --build
+#   # or: npm run docker:up
+#
+# Open http://localhost:3002
+
+services:
+  website:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: website
+
+    ports:
+      - "${WEBSITE_PORT:-3002}:8080"
+
+    restart: unless-stopped
