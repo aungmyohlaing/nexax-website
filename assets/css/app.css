@@ -393,18 +393,17 @@ html[lang="my"] .erp-hero-copy p {
 .product-video-frame {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 1880 / 966;
+  aspect-ratio: 16 / 9;
   background: var(--color-surface);
 }
 
 .product-video-frame video {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: calc(100% * 1920 / 1880);
-  height: calc(100% * 1080 / 966);
+  inset: 0;
+  width: 100%;
+  height: 100%;
   max-width: none;
-  object-fit: fill;
+  object-fit: contain;
   background: var(--color-surface);
 }
 

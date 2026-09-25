@@ -36,7 +36,7 @@
           </button>
         </div>
 
-        <form v-if="!sent" class="grid gap-4 px-6 py-5" @submit.prevent="submit">
+        <form v-if="!sent" class="relative grid gap-4 px-6 py-5" @submit.prevent="submit">
           <label class="grid gap-1.5">
             <span class="font-body text-[13px] font-medium text-[color:var(--color-text)]">
               {{ t("erpPage.demo.company") }}
@@ -87,8 +87,18 @@
               :placeholder="t('erpPage.demo.businessPlaceholder')"
             />
           </label>
-          <BaseButton type="submit" class="mt-1 w-full">
-            {{ t("erpPage.demo.submit") }}
+          <!-- Honeypot: leave empty -->
+          <div class="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+            <label>
+              Website
+              <input v-model="website" type="text" tabindex="-1" autocomplete="off">
+            </label>
+          </div>
+          <p v-if="error" class="font-body text-[13px] leading-[1.45] text-[color:var(--color-error)]">
+            {{ error }}
+          </p>
+          <BaseButton type="submit" class="mt-1 w-full" :disabled="submitting">
+            {{ submitting ? t("erpPage.demo.sending") : t("erpPage.demo.submit") }}
           </BaseButton>
         </form>
 
@@ -145,13 +155,19 @@ const company = ref("")
 const phone = ref("")
 const email = ref("")
 const business = ref("")
+const website = ref("")
 const sent = ref(false)
+const submitting = ref(false)
+const error = ref("")
 
 watch(open, (isOpen) => {
   if (!import.meta.client) return
   document.body.style.overflow = isOpen ? "hidden" : ""
   if (!isOpen) return
   sent.value = false
+  submitting.value = false
+  error.value = ""
+  website.value = ""
 })
 
 onBeforeUnmount(() => {
@@ -171,18 +187,38 @@ onBeforeUnmount(() => {
   window.removeEventListener("keydown", onKeydown)
 })
 
-const submit = () => {
-  const subject = encodeURIComponent("NexaX ERP demo request")
-  const body = encodeURIComponent(
-    [
-      `Company: ${company.value}`,
-      `Phone: ${phone.value}`,
-      `Email: ${email.value}`,
-      `Business: ${business.value}`,
-    ].join("\n"),
-  )
-  sent.value = true
-  if (!import.meta.client) return
-  window.location.href = `mailto:${SITE.contactEmail}?subject=${subject}&body=${body}`
+const submit = async () => {
+  if (submitting.value) return
+  submitting.value = true
+  error.value = ""
+
+  try {
+    await $fetch("/api/demo", {
+      method: "POST",
+      body: {
+        source: "erp",
+        company: company.value,
+        phone: phone.value,
+        email: email.value,
+        business: business.value,
+        website: website.value,
+      },
+    })
+    sent.value = true
+    company.value = ""
+    phone.value = ""
+    email.value = ""
+    business.value = ""
+    website.value = ""
+  } catch (err: unknown) {
+    const status = typeof err === "object" && err && "statusCode" in err
+      ? Number((err as { statusCode?: number }).statusCode)
+      : 0
+    error.value = status === 429
+      ? t("erpPage.demo.rateLimited")
+      : t("erpPage.demo.error")
+  } finally {
+    submitting.value = false
+  }
 }
 </script>

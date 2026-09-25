@@ -20,6 +20,7 @@
   <button
     v-else
     :type="type"
+    :disabled="disabled"
     :class="buttonClasses"
     @click="$emit('click')"
   >
@@ -35,6 +36,7 @@ interface Props {
   to?: string
   href?: string
   external?: boolean
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -42,6 +44,7 @@ const props = withDefaults(defineProps<Props>(), {
   size: "md",
   type: "button",
   external: false,
+  disabled: false,
 })
 
 defineEmits<{
@@ -54,7 +57,7 @@ const buttonClasses = computed(() => {
     md: "px-6 py-3 text-[15px]",
   }
   const base =
-    "inline-flex items-center justify-center gap-2 font-body font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary)] focus-visible:ring-offset-2 rounded-full"
+    "inline-flex items-center justify-center gap-2 font-body font-semibold transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary)] focus-visible:ring-offset-2 rounded-full disabled:pointer-events-none disabled:opacity-60"
   const variants = {
     dark: "bg-[color:var(--color-stage)] text-[color:var(--color-on-dark)] hover:bg-[color:var(--color-stage-soft)] focus-visible:ring-offset-[color:var(--color-bg)]",
     mint: "bg-[color:var(--color-primary)] text-white hover:bg-[color:var(--color-primary-soft)] focus-visible:ring-offset-[color:var(--color-bg)]",

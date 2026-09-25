@@ -13,6 +13,11 @@ export default defineNuxtConfig({
     },
   ],
   ssr: true,
+  runtimeConfig: {
+    resendApiKey: "",
+    resendFrom: "",
+    resendTo: SITE.contactEmail,
+  },
   routeRules: {
     "/regify": { redirect: { to: SITE.regifyUrl, statusCode: 301 } },
   },

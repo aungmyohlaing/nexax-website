@@ -14,7 +14,7 @@
               {{ t("cta.body") }}
             </p>
 
-            <form v-if="!sent" class="mt-8 grid gap-4" @submit.prevent="submit">
+            <form v-if="!sent" class="relative mt-8 grid gap-4" @submit.prevent="submit">
               <label class="grid gap-1">
                 <span class="font-body text-[12px] font-medium text-slate-600 dark:text-slate-300">
                   {{ t("cta.name") }}
@@ -74,11 +74,21 @@
                   class="resize-y rounded-xl border border-slate-200 bg-white px-3 py-2.5 font-body text-[14px] text-slate-900 outline-none focus:border-slate-400 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
                 />
               </label>
+              <div class="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+                <label>
+                  Website
+                  <input v-model="website" type="text" tabindex="-1" autocomplete="off">
+                </label>
+              </div>
+              <p v-if="error" class="font-body text-[13px] text-red-600 dark:text-red-400">
+                {{ error }}
+              </p>
               <button
                 type="submit"
-                class="mt-1 inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-3 font-body text-[15px] font-semibold text-white hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+                :disabled="submitting"
+                class="mt-1 inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-3 font-body text-[15px] font-semibold text-white hover:bg-slate-800 disabled:opacity-60 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
               >
-                {{ t("cta.submit") }}
+                {{ submitting ? t("cta.sending") : t("cta.submit") }}
               </button>
             </form>
             <p v-else class="copy mt-8 font-body text-[15px] text-slate-600 dark:text-slate-300">
@@ -139,7 +149,10 @@ const business = ref("")
 const phone = ref("")
 const product = ref("erp")
 const note = ref("")
+const website = ref("")
 const sent = ref(false)
+const submitting = ref(false)
+const error = ref("")
 
 const products = [
   { value: "erp", label: "cta.productErp" },
@@ -147,22 +160,41 @@ const products = [
   { value: "both", label: "cta.productBoth" },
 ] as const
 
-const submit = () => {
+const submit = async () => {
+  if (submitting.value) return
+  submitting.value = true
+  error.value = ""
+
   const productLabel = t(products.find((item) => item.value === product.value)?.label ?? "cta.productErp")
-  const subject = encodeURIComponent(`Demo request — ${productLabel}`)
-  const body = encodeURIComponent(
-    [
-      `Name: ${name.value}`,
-      `Business: ${business.value}`,
-      `Phone / Viber: ${phone.value}`,
-      `Product: ${productLabel}`,
-      note.value ? `Notes: ${note.value}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n"),
-  )
-  sent.value = true
-  if (!import.meta.client) return
-  window.location.href = `mailto:${SITE.contactEmail}?subject=${subject}&body=${body}`
+
+  try {
+    await $fetch("/api/demo", {
+      method: "POST",
+      body: {
+        source: "contact",
+        name: name.value,
+        business: business.value,
+        phone: phone.value,
+        product: productLabel,
+        note: note.value,
+        website: website.value,
+      },
+    })
+    sent.value = true
+    name.value = ""
+    business.value = ""
+    phone.value = ""
+    note.value = ""
+    website.value = ""
+  } catch (err: unknown) {
+    const status = typeof err === "object" && err && "statusCode" in err
+      ? Number((err as { statusCode?: number }).statusCode)
+      : 0
+    error.value = status === 429
+      ? t("cta.rateLimited")
+      : t("cta.error")
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
