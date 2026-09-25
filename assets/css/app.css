@@ -244,6 +244,8 @@ html[lang="my"] .erp-hero-copy p {
 .erp-rail {
   display: flex;
   gap: 12px;
+  margin-block: -16px -24px;
+  padding-block: 16px 40px;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
@@ -258,6 +260,12 @@ html[lang="my"] .erp-hero-copy p {
 .erp-rail > * {
   scroll-snap-align: center;
   flex-shrink: 0;
+}
+
+/* Rails clip overflow, so card shadows must fit inside the rail's padding. */
+.erp-rail > .erp-depth,
+.erp-rail > .shadow-card {
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--color-stage) 14%, transparent);
 }
 
 .erp-flow-rail {
@@ -288,6 +296,12 @@ html[lang="my"] .erp-hero-copy p {
 .erp-flow-chip-sm {
   gap: 6px;
   padding: 8px 12px;
+}
+
+.erp-flow-chip-active {
+  border-color: var(--color-stage);
+  background: var(--color-stage);
+  color: var(--color-on-dark);
 }
 
 .erp-flow-chip-dark {

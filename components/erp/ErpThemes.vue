@@ -13,9 +13,7 @@
             type="button"
             role="tab"
             class="erp-flow-chip min-h-[40px] font-body text-[13px] font-semibold transition-colors"
-            :class="theme.id === activeId
-              ? 'border-[color:var(--color-stage)] bg-[color:var(--color-stage)] text-[color:var(--color-on-dark)]'
-              : 'text-[color:var(--color-text)]'"
+            :class="theme.id === activeId ? 'erp-flow-chip-active' : 'text-[color:var(--color-text)]'"
             :aria-selected="theme.id === activeId"
             @click="scrollToTheme(theme.id)"
           >
