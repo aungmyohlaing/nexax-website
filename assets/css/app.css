@@ -285,6 +285,11 @@ html[lang="my"] .erp-hero-copy p {
   white-space: nowrap;
 }
 
+.erp-flow-chip-sm {
+  gap: 6px;
+  padding: 8px 12px;
+}
+
 .erp-flow-chip-dark {
   border-color: color-mix(in srgb, var(--color-on-dark) 18%, transparent);
   background: color-mix(in srgb, var(--color-stage-soft) 80%, transparent);
@@ -295,12 +300,6 @@ html[lang="my"] .erp-hero-copy p {
   .erp-bleed {
     width: calc(100% + var(--page-pad) * 2);
     margin-inline: calc(var(--page-pad) * -1);
-  }
-
-  .erp-bleed-shot {
-    border-radius: 0;
-    border-left: 0;
-    border-right: 0;
   }
 
   .erp-mobile-stack {
@@ -390,20 +389,23 @@ html[lang="my"] .erp-hero-copy p {
   -webkit-backdrop-filter: blur(10px);
 }
 
+/* The recording is 1920×1080 with black bars baked into the right and bottom
+   edges; only the top-left 1876×964 is real content. */
 .product-video-frame {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 1876 / 964;
   background: var(--color-surface);
 }
 
 .product-video-frame video {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  left: 0;
+  top: 0;
+  width: calc(100% * 1920 / 1876);
+  height: calc(100% * 1080 / 964);
   max-width: none;
-  object-fit: contain;
+  object-fit: fill;
   background: var(--color-surface);
 }
 

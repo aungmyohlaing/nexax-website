@@ -32,7 +32,7 @@
             class="pointer-events-none absolute -left-3 top-6 hidden h-[calc(100%-2.5rem)] w-5 rounded-l-[24px] bg-[color:var(--color-gold-soft)] lg:block"
             aria-hidden="true"
           />
-          <figure class="erp-depth erp-bleed erp-bleed-shot relative overflow-hidden border border-[color:var(--color-border)] bg-[color:var(--color-surface)] sm:rounded-[24px] lg:w-[138%] lg:max-w-none lg:rounded-r-none">
+          <figure class="erp-depth relative overflow-hidden rounded-[20px] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] sm:rounded-[24px] lg:w-[138%] lg:max-w-none lg:rounded-r-none">
             <img
               src="/images/erp/hero-dashboard.png"
               :alt="t('erpPage.hero.imageAlt')"

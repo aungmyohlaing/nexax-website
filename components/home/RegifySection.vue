@@ -18,7 +18,7 @@
             :key="item"
             class="flex gap-4"
           >
-            <span class="font-body text-[13px] font-semibold text-[color:var(--color-gold)] w-8 pt-1">
+            <span class="font-body text-[13px] font-semibold text-[color:var(--color-gold)] w-8 shrink-0 pt-1">
               0{{ index + 1 }}
             </span>
             <div>

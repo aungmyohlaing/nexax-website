@@ -16,7 +16,7 @@
           <span class="erp-callout">{{ t("erpPage.sales.items") }}</span>
         </div>
 
-        <figure class="erp-depth erp-bleed erp-bleed-shot relative overflow-hidden border border-[color:var(--color-border)] bg-[color:var(--color-surface)] sm:rounded-[24px]">
+        <figure class="erp-depth relative overflow-hidden rounded-[20px] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] sm:rounded-[24px]">
           <img
             src="/images/erp/sale-create.png"
             :alt="t('erpPage.sales.imageAlt')"

@@ -16,7 +16,7 @@
         </p>
 
         <div class="relative mt-4 lg:mt-4">
-          <figure class="erp-depth erp-bleed erp-bleed-shot overflow-hidden border border-[color:var(--color-border)] bg-[color:var(--color-surface)] sm:rounded-[24px]">
+          <figure class="erp-depth overflow-hidden rounded-[20px] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] sm:rounded-[24px]">
             <img
               src="/images/erp/multishop-dashboard.png"
               :alt="t('erpPage.shops.dashAlt')"
@@ -28,13 +28,13 @@
             >
           </figure>
 
-          <div class="erp-bleed mt-4 px-[var(--page-pad)] lg:hidden">
-            <div class="erp-flow-rail mb-3 justify-center">
-              <span class="erp-flow-chip font-heading text-[14px] font-semibold">{{ t("erpPage.shops.main") }}</span>
-              <span class="erp-flow-chip font-body text-[12px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-primary)]">
+          <div class="mt-4 lg:hidden">
+            <div class="mb-3 flex flex-wrap items-center justify-center gap-1.5">
+              <span class="erp-flow-chip erp-flow-chip-sm font-heading text-[13px] font-semibold">{{ t("erpPage.shops.main") }}</span>
+              <span class="erp-flow-chip erp-flow-chip-sm font-body text-[11px] font-semibold uppercase tracking-[0.08em] text-[color:var(--color-primary)]">
                 {{ t("erpPage.shops.transfer") }}
               </span>
-              <span class="erp-flow-chip font-heading text-[14px] font-semibold">{{ t("erpPage.shops.branch") }}</span>
+              <span class="erp-flow-chip erp-flow-chip-sm font-heading text-[13px] font-semibold">{{ t("erpPage.shops.branch") }}</span>
             </div>
             <figure class="erp-depth overflow-hidden rounded-[20px] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] shadow-card">
               <img

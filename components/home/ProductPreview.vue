@@ -11,7 +11,7 @@
       </p>
       <div class="product-video-frame mt-4 overflow-hidden rounded-[24px] border border-[color:var(--color-border)]">
         <video
-          :src="SITE.erpVideoUrl"
+          :src="`${SITE.erpVideoUrl}#t=0.1`"
           muted
           playsinline
           preload="metadata"

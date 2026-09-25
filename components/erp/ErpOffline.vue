@@ -4,8 +4,8 @@
     class="scroll-mt-24 overflow-x-clip bg-[color:var(--color-stage)] text-[color:var(--color-on-dark)]"
     data-nav-dark
   >
-    <div class="page-shell grid items-center gap-6 py-12 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-10 lg:py-24">
-      <div class="order-2 lg:order-1">
+    <div class="page-shell grid grid-cols-1 items-center gap-6 py-12 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-10 lg:py-24">
+      <div class="order-2 min-w-0 lg:order-1">
         <h2 class="reveal font-heading text-[28px] font-semibold leading-[1.15] md:text-[44px]">
           {{ t("erpPage.offline.title") }}
         </h2>
@@ -70,7 +70,7 @@
         </ol>
       </div>
 
-      <figure class="reveal reveal-delay-2 order-1 erp-bleed erp-bleed-shot min-w-0 overflow-hidden border border-[color:var(--color-stage-soft)] bg-[color:var(--color-surface)] sm:rounded-[24px] lg:order-2 lg:w-[108%]">
+      <figure class="reveal reveal-delay-2 order-1 min-w-0 overflow-hidden rounded-[20px] border border-[color:var(--color-stage-soft)] bg-[color:var(--color-surface)] sm:rounded-[24px] lg:order-2 lg:w-[108%]">
         <img
           src="/images/erp/offline-dashboard.png"
           :alt="t('erpPage.offline.imageAlt')"
