@@ -109,7 +109,20 @@
           </div>
         </div>
 
-        <BaseButton href="/#contact" size="sm" :variant="onDark ? 'mint' : 'dark'">
+        <BaseButton
+          v-if="isErpPage"
+          size="sm"
+          :variant="onDark ? 'mint' : 'dark'"
+          @click="openErpDemo"
+        >
+          {{ t("nav.talk") }}
+        </BaseButton>
+        <BaseButton
+          v-else
+          href="/#contact"
+          size="sm"
+          :variant="onDark ? 'mint' : 'dark'"
+        >
           {{ t("nav.talk") }}
         </BaseButton>
       </nav>
@@ -163,7 +176,10 @@
             <span>/</span>
             <button type="button" class="myanmar" @click="setLocale('my')">{{ t("lang.my") }}</button>
           </div>
-          <BaseButton href="/#contact" @click="mobileOpen = false">
+          <BaseButton v-if="isErpPage" @click="openErpDemo">
+            {{ t("nav.talk") }}
+          </BaseButton>
+          <BaseButton v-else href="/#contact" @click="mobileOpen = false">
             {{ t("nav.talk") }}
           </BaseButton>
         </nav>
@@ -178,12 +194,20 @@ import { SITE } from "~/constants/site"
 
 const { t, locale, setLocale } = useLocale()
 const route = useRoute()
+const { show: showErpDemo } = useErpDemoModal()
 const headerRef = ref<HTMLElement | null>(null)
 const productsOpen = ref(false)
 const langOpen = ref(false)
 const mobileOpen = ref(false)
 const onDark = ref(false)
 let frame = 0
+
+const isErpPage = computed(() => route.path === "/erp" || route.path.startsWith("/erp/"))
+
+const openErpDemo = () => {
+  mobileOpen.value = false
+  showErpDemo()
+}
 
 const chooseLocale = (next: Locale) => {
   setLocale(next)

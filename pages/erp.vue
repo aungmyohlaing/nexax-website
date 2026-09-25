@@ -1,21 +1,29 @@
 <template>
-  <div>
-    <div class="page-shell pt-8 md:pt-12">
-      <BaseButton variant="ghost" to="/">
-        {{ t("productPage.back") }}
-      </BaseButton>
-    </div>
-    <NexaErpShowcaseSection />
-    <ProductCtaSection />
+  <div class="overflow-x-clip">
+    <ErpHero />
+    <ErpVideoSection />
+    <ErpStatement />
+    <ErpSales />
+    <ErpInventory />
+    <ErpMultiShop />
+    <ErpOffline />
+    <ErpMoney />
+    <ErpPeople />
+    <ErpThemes />
+    <ErpFinalCta />
+    <ErpDemoModal />
   </div>
 </template>
 
 <script setup lang="ts">
-const { t } = useLocale()
+const { t, locale } = useLocale()
 useReveal()
 
 useHead(() => ({
-  title: `${t("productPage.erpTitle")} — NexaXTech`,
-  meta: [{ name: "description", content: t("productPage.erpBody") }],
+  title: `${t("erpPage.metaTitle")} — NexaXTech`,
+  htmlAttrs: {
+    lang: locale.value === "my" ? "my" : "en",
+  },
+  meta: [{ name: "description", content: t("erpPage.metaDescription") }],
 }))
 </script>

@@ -175,6 +175,140 @@ html[lang="my"] .hero-copy p {
   transition-delay: 240ms;
 }
 
+.reveal-delay-4 {
+  transition-delay: 320ms;
+}
+
+.reveal-delay-5 {
+  transition-delay: 400ms;
+}
+
+.reveal-delay-6 {
+  transition-delay: 480ms;
+}
+
+.erp-hero-copy :is(h1, p) {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+html[lang="my"] .erp-hero-copy h1 {
+  line-height: 0.96;
+}
+
+html[lang="my"] .erp-hero-copy p {
+  line-height: 1.45;
+}
+
+.erp-depth {
+  box-shadow: 0 28px 70px color-mix(in srgb, var(--color-stage) 16%, transparent);
+}
+
+.erp-bridge {
+  height: 52px;
+  border-top: 1px solid color-mix(in srgb, var(--color-primary) 55%, transparent);
+  border-right: 1px solid color-mix(in srgb, var(--color-primary) 55%, transparent);
+  border-top-right-radius: 14px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.7s ease;
+}
+
+.reveal.is-visible .erp-bridge {
+  transform: scaleX(1);
+}
+
+.erp-theme-card {
+  transition:
+    transform 0.55s ease,
+    opacity 0.55s ease;
+}
+
+@keyframes erp-nudge {
+  0% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.erp-nudge {
+  animation: erp-nudge 0.45s ease;
+}
+
+/* Mobile product-story helpers (desktop layouts stay untouched) */
+.erp-rail {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.erp-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.erp-rail > * {
+  scroll-snap-align: center;
+  flex-shrink: 0;
+}
+
+.erp-flow-rail {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.erp-flow-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.erp-flow-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 10px 14px;
+  white-space: nowrap;
+}
+
+.erp-flow-chip-dark {
+  border-color: color-mix(in srgb, var(--color-on-dark) 18%, transparent);
+  background: color-mix(in srgb, var(--color-stage-soft) 80%, transparent);
+  color: var(--color-on-dark);
+}
+
+@media (max-width: 1023px) {
+  .erp-bleed {
+    width: calc(100% + var(--page-pad) * 2);
+    margin-inline: calc(var(--page-pad) * -1);
+  }
+
+  .erp-bleed-shot {
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+
+  .erp-mobile-stack {
+    display: grid;
+    gap: 12px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -188,8 +322,19 @@ html[lang="my"] .hero-copy p {
   }
 
   .stage-drift,
-  .hero-cta {
+  .hero-cta,
+  .erp-nudge {
     animation: none !important;
+  }
+
+  .erp-bridge,
+  .reveal.is-visible .erp-bridge {
+    transform: none;
+    transition: none;
+  }
+
+  .erp-theme-card {
+    transition: none;
   }
 
   .hero-pattern,
