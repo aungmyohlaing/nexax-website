@@ -24,6 +24,10 @@ describe("normalizeHostname", () => {
     assert.equal(normalizeHostname("[::1]:3000"), "::1")
   })
 
+  it("strips a trailing DNS dot", () => {
+    assert.equal(normalizeHostname("nexaxtech.com."), APEX_HOSTNAME)
+  })
+
   it("returns empty for blank input", () => {
     assert.equal(normalizeHostname(""), "")
     assert.equal(normalizeHostname(null), "")

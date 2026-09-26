@@ -25,9 +25,11 @@ export default defineNuxtConfig({
     "/regify": { redirect: { to: SITE.regifyUrl, statusCode: 301 } },
   },
   nitro: {
+    // Host-based redirects must run before static HTML. Prerendering `/` and
+    // `/erp` made Nitro serve those pages as assets and skip the redirect.
     prerender: {
-      crawlLinks: true,
-      routes: ["/", "/erp"],
+      crawlLinks: false,
+      routes: [],
     },
   },
   app: {

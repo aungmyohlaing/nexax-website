@@ -6,7 +6,7 @@ export const CANONICAL_ORIGIN = "https://www.nexaxtech.com"
 
 /**
  * Normalize a Host / X-Forwarded-Host value to a bare hostname.
- * Strips optional port and lowercases; empty/invalid input yields "".
+ * Strips optional port, trailing DNS dots, and lowercases; empty/invalid → "".
  * @param {string | undefined | null} raw
  */
 export const normalizeHostname = (raw) => {
@@ -21,7 +21,7 @@ export const normalizeHostname = (raw) => {
   // hostname:port (avoid splitting IPv6 without brackets)
   const colon = first.indexOf(":")
   const host = colon === -1 ? first : first.slice(0, colon)
-  return host.toLowerCase()
+  return host.replace(/\.$/, "").toLowerCase()
 }
 
 /** True only for the bare apex `nexaxtech.com` (not www, not other hosts). */
