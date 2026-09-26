@@ -13,28 +13,30 @@
           {{ t("erpPage.offline.body") }}
         </p>
 
-        <ol class="reveal reveal-delay-2 erp-tag-wrap mt-5 lg:hidden">
-          <li
-            v-for="step in steps"
-            :key="step.label"
-            class="erp-tag erp-tag-dark"
-          >
-            <span
-              v-if="step.cloud"
-              class="mr-1.5 text-[color:var(--color-gold)]"
-              aria-hidden="true"
-            >☁</span>
-            <span
-              v-else
-              class="mr-1.5 inline-block h-2.5 w-2.5 rounded-full border"
-              :class="step.filled
-                ? 'border-[color:var(--color-gold)] bg-[color:var(--color-gold)]'
-                : 'border-[color:var(--color-on-dark-soft)] bg-transparent'"
-              aria-hidden="true"
-            />
-            {{ step.label }}
-          </li>
-        </ol>
+        <div class="reveal reveal-delay-2 mt-5 lg:hidden">
+          <ol class="erp-tag-wrap">
+            <li
+              v-for="step in steps"
+              :key="step.label"
+              class="erp-tag erp-tag-dark"
+            >
+              <span
+                v-if="step.cloud"
+                class="mr-1.5 text-[color:var(--color-gold)]"
+                aria-hidden="true"
+              >☁</span>
+              <span
+                v-else
+                class="mr-1.5 inline-block h-2.5 w-2.5 rounded-full border"
+                :class="step.filled
+                  ? 'border-[color:var(--color-gold)] bg-[color:var(--color-gold)]'
+                  : 'border-[color:var(--color-on-dark-soft)] bg-transparent'"
+                aria-hidden="true"
+              />
+              {{ step.label }}
+            </li>
+          </ol>
+        </div>
 
         <ol class="reveal reveal-delay-2 mt-8 hidden space-y-0 lg:block">
           <li

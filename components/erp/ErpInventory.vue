@@ -5,21 +5,23 @@
         {{ t("erpPage.inventory.title") }}
       </h2>
 
-      <ol class="reveal reveal-delay-1 erp-step-wrap mt-6 lg:hidden" aria-label="Inventory flow">
-        <li
-          v-for="(step, index) in steps"
-          :key="step"
-          class="erp-step-item"
-        >
-          <span class="erp-step-num erp-step-num-primary" aria-hidden="true">{{ index + 1 }}</span>
-          {{ step }}
-          <span
-            v-if="index < steps.length - 1"
-            class="erp-step-dot ml-1"
-            aria-hidden="true"
-          />
-        </li>
-      </ol>
+      <div class="reveal reveal-delay-1 mt-6 lg:hidden">
+        <ol class="erp-step-wrap" aria-label="Inventory flow">
+          <li
+            v-for="(step, index) in steps"
+            :key="step"
+            class="erp-step-item"
+          >
+            <span class="erp-step-num erp-step-num-primary" aria-hidden="true">{{ index + 1 }}</span>
+            {{ step }}
+            <span
+              v-if="index < steps.length - 1"
+              class="erp-step-dot ml-1"
+              aria-hidden="true"
+            />
+          </li>
+        </ol>
+      </div>
 
       <ol class="reveal reveal-delay-1 mt-8 hidden lg:flex lg:items-center">
         <li

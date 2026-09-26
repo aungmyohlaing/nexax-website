@@ -28,15 +28,17 @@
           >
         </figure>
 
-        <ul class="erp-tag-wrap mt-4 lg:hidden">
-          <li
-            v-for="label in mobileLabels"
-            :key="label"
-            class="erp-tag"
-          >
-            {{ label }}
-          </li>
-        </ul>
+        <div class="mt-4 lg:hidden">
+          <ul class="erp-tag-wrap">
+            <li
+              v-for="label in mobileLabels"
+              :key="label"
+              class="erp-tag"
+            >
+              {{ label }}
+            </li>
+          </ul>
+        </div>
 
         <div class="mt-4 hidden items-center justify-between gap-3 px-[4%] lg:flex">
           <span class="erp-callout">{{ t("erpPage.sales.quantity") }}</span>
