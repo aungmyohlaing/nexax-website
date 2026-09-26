@@ -17,6 +17,9 @@ export default defineNuxtConfig({
     resendApiKey: "",
     resendFrom: "",
     resendTo: SITE.contactEmail,
+    public: {
+      siteUrl: SITE.siteUrl,
+    },
   },
   routeRules: {
     "/regify": { redirect: { to: SITE.regifyUrl, statusCode: 301 } },
@@ -41,6 +44,10 @@ export default defineNuxtConfig({
         { name: "theme-color", content: "#FCFAF7" },
       ],
       link: [
+        {
+          rel: "canonical",
+          href: `${SITE.siteUrl}/`,
+        },
         {
           rel: "icon",
           type: "image/png",
@@ -90,4 +97,4 @@ export default defineNuxtConfig({
       include: ["lucide-vue-next"],
     },
   },
-});
+})

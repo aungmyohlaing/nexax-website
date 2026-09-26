@@ -8,6 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "test": "node --test server/utils/canonicalHost.test.mjs",
     "docker:up": "docker compose up --build",
     "docker:down": "docker compose down"
   },

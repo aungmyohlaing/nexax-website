@@ -1,6 +1,7 @@
 export const SITE = {
   name: "NexaXTech",
   fullName: "NexaX Technologies",
+  siteUrl: "https://www.nexaxtech.com",
   logoUrl: "/brand/nexax_icon.png",
   contactEmail: "amhlaing@gmail.com",
   phone: "+959449546778",
