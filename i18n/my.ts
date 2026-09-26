@@ -25,13 +25,23 @@ export const my: Messages = {
   hero: {
     kicker: "We are NexaXTech",
     headline: "We build software around real business problems.",
-    body: "NexaX ERP က ကျွန်ုပ်တို့ရဲ့ အဓိကထုတ်ကုန်ပါ။ လုပ်ငန်းတစ်ခု လက်ရှိလုပ်ဆောင်နေတဲ့ အလုပ်အတိုင်းကနေ စပြီး၊ အဲဒီပေါ်အခြေခံပြီး Tool ကို တည်ဆောက်ပေးပါတယ်။",
+    body: "လုပ်ငန်းတစ်ခု လက်ရှိလုပ်ဆောင်နေတဲ့ အလုပ်အတိုင်းကနေ စပြီး၊ အဲဒီပေါ်အခြေခံပြီး Tool ကို တည်ဆောက်ပေးပါတယ်။",
     myanmar: "တကယ်ရှိတဲ့ Business Problem တွေကနေ စတင်ပါတယ်။",
     primary: "Products ကြည့်ရန်",
     secondary: "ဘာတွေ လုပ်သလဲ",
-    imageAlt:
-      "စားပွဲပေါ်ရှိ laptop တစ်လုံးတွင် business dashboard ကို ပြထားသည်",
+    imageAlt: "NexaX ERP dashboard themes — Classic, Purple, Magenta, Orange နှင့် Cygan",
     visualTitle: "NexaX ERP",
+    themesLabel: "ERP themes",
+    themeClassic: "Classic",
+    themePurple: "Purple",
+    themeMagenta: "Magenta",
+    themeOrange: "Orange",
+    themeCygan: "Cygan",
+    themeClassicAlt: "NexaX ERP Classic theme dashboard",
+    themePurpleAlt: "NexaX ERP Purple theme dashboard",
+    themeMagentaAlt: "NexaX ERP Magenta theme dashboard",
+    themeOrangeAlt: "NexaX ERP Orange theme dashboard",
+    themeCyganAlt: "NexaX ERP Cygan theme dashboard",
   },
   erp: {
     kicker: "Our flagship product",
@@ -43,6 +53,7 @@ export const my: Messages = {
     visualLabel: "Product preview",
     visualHint: "Product ကြည့်ရန်",
     play: "Preview ဖွင့်ရန်",
+    themesLine: "Theme မျိုးစုံ — Classic, Purple, Magenta, Orange, Cygan။",
   },
   teaser: {
     title: "More than a POS.",
@@ -247,6 +258,10 @@ export const my: Messages = {
     rateLimited: "တောင်းဆိုမှု များလွန်းနေပါတယ်။ ခဏစောင့်ပြီး ပြန်ကြိုးစားပါ။",
   },
   erpPage: {
+    carousel: {
+      prev: "ယခင်",
+      next: "နောက်",
+    },
     metaTitle: "NexaX ERP",
     metaDescription:
       "Sales, Inventory, Finance နဲ့ Reports တွေကို System တစ်ခုတည်းနဲ့ ချိတ်ဆက်ထားပါတယ်။",

@@ -5,46 +5,51 @@
         {{ t("erpPage.themes.title") }}
       </h2>
 
-      <div class="reveal reveal-delay-1 erp-bleed mt-6 lg:hidden">
-        <div class="erp-flow-rail mb-4 px-[var(--page-pad)]" role="tablist" :aria-label="t('erpPage.themes.switchLabel')">
+      <div class="reveal reveal-delay-1 mt-6 lg:hidden">
+        <div class="erp-seg-wrap mb-4" role="tablist" :aria-label="t('erpPage.themes.switchLabel')">
           <button
             v-for="theme in themes"
             :key="`${theme.id}-m`"
             type="button"
             role="tab"
-            class="erp-flow-chip min-h-[40px] font-body text-[13px] font-semibold transition-colors"
-            :class="theme.id === activeId ? 'erp-flow-chip-active' : 'text-[color:var(--color-text)]'"
+            class="erp-seg"
+            :class="theme.id === activeId ? 'erp-seg-active' : ''"
             :aria-selected="theme.id === activeId"
             @click="scrollToTheme(theme.id)"
           >
             {{ theme.label }}
           </button>
         </div>
-        <div
-          ref="railRef"
-          class="erp-rail px-[var(--page-pad)]"
-          :aria-label="t('erpPage.themes.switchLabel')"
-          @scroll.passive="onRailScroll"
-        >
-          <figure
-            v-for="theme in themes"
-            :key="theme.id"
-            :data-theme-id="theme.id"
-            class="erp-depth w-[88%] overflow-hidden rounded-[20px] border border-[color:var(--color-border)] bg-[color:var(--color-surface)]"
+
+        <div class="erp-bleed">
+          <ErpCarousel
+            ref="carouselRef"
+            rail-class="px-[var(--page-pad)]"
+            :aria-label="t('erpPage.themes.switchLabel')"
+            :prev-label="t('erpPage.carousel.prev')"
+            :next-label="t('erpPage.carousel.next')"
+            @index-change="onIndexChange"
           >
-            <img
-              :src="theme.src"
-              :alt="theme.alt"
-              :width="theme.width"
-              :height="theme.height"
-              loading="lazy"
-              decoding="async"
-              class="block h-[min(52vw,260px)] w-full object-cover object-left-top"
+            <figure
+              v-for="theme in themes"
+              :key="theme.id"
+              :data-theme-id="theme.id"
+              class="erp-depth w-[88%] overflow-hidden rounded-[20px] border border-[color:var(--color-border)] bg-[color:var(--color-surface)]"
             >
-            <figcaption class="border-t border-[color:var(--color-border)] px-4 py-3 font-heading text-[15px] font-semibold">
-              {{ theme.label }}
-            </figcaption>
-          </figure>
+              <img
+                :src="theme.src"
+                :alt="theme.alt"
+                :width="theme.width"
+                :height="theme.height"
+                loading="lazy"
+                decoding="async"
+                class="block h-[min(52vw,260px)] w-full object-cover object-left-top"
+              >
+              <figcaption class="border-t border-[color:var(--color-border)] px-4 py-3 font-heading text-[15px] font-semibold">
+                {{ theme.label }}
+              </figcaption>
+            </figure>
+          </ErpCarousel>
         </div>
       </div>
 
@@ -132,31 +137,16 @@ const themes = computed(() => [
 ])
 
 const activeId = ref("classic")
-const railRef = ref<HTMLElement | null>(null)
+const carouselRef = ref<{ scrollToSelector: (selector: string) => void } | null>(null)
 
 const scrollToTheme = (id: string) => {
   activeId.value = id
-  const rail = railRef.value
-  if (!rail) return
-  const target = rail.querySelector(`[data-theme-id="${id}"]`) as HTMLElement | null
-  target?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" })
+  carouselRef.value?.scrollToSelector(`[data-theme-id="${id}"]`)
 }
 
-const onRailScroll = () => {
-  const rail = railRef.value
-  if (!rail) return
-  const center = rail.scrollLeft + rail.clientWidth / 2
-  let bestId = activeId.value
-  let bestDist = Number.POSITIVE_INFINITY
-  rail.querySelectorAll<HTMLElement>("[data-theme-id]").forEach((el) => {
-    const mid = el.offsetLeft + el.offsetWidth / 2
-    const dist = Math.abs(mid - center)
-    if (dist < bestDist) {
-      bestDist = dist
-      bestId = el.dataset.themeId || bestId
-    }
-  })
-  if (bestId !== activeId.value) activeId.value = bestId
+const onIndexChange = (index: number) => {
+  const theme = themes.value[index]
+  if (theme) activeId.value = theme.id
 }
 
 const cardStyle = (index: number) => {

@@ -5,20 +5,21 @@
         {{ t("erpPage.money.title") }}
       </h2>
 
-      <div class="reveal reveal-delay-1 erp-bleed mt-6 lg:hidden">
-        <ol class="erp-flow-rail px-[var(--page-pad)]">
-          <li
-            v-for="(step, index) in steps"
-            :key="step"
-            class="erp-flow-chip font-heading text-[14px] font-semibold text-[color:var(--color-text)]"
-          >
-            <span class="flex h-5 w-5 items-center justify-center rounded-full bg-[color:var(--color-gold)/0.2] font-body text-[11px] font-semibold text-[color:var(--color-gold)]">
-              {{ index + 1 }}
-            </span>
-            {{ step }}
-          </li>
-        </ol>
-      </div>
+      <ol class="reveal reveal-delay-1 erp-step-wrap mt-6 lg:hidden">
+        <li
+          v-for="(step, index) in steps"
+          :key="step"
+          class="erp-step-item"
+        >
+          <span class="erp-step-num erp-step-num-gold" aria-hidden="true">{{ index + 1 }}</span>
+          {{ step }}
+          <span
+            v-if="index < steps.length - 1"
+            class="erp-step-dot ml-1"
+            aria-hidden="true"
+          />
+        </li>
+      </ol>
 
       <ol class="reveal reveal-delay-1 mt-8 hidden lg:flex lg:items-center">
         <li
@@ -39,7 +40,12 @@
       </ol>
 
       <div class="reveal reveal-delay-2 erp-bleed mt-8 lg:hidden">
-        <div class="erp-rail px-[var(--page-pad)]">
+        <ErpCarousel
+          rail-class="px-[var(--page-pad)]"
+          :aria-label="t('erpPage.money.title')"
+          :prev-label="t('erpPage.carousel.prev')"
+          :next-label="t('erpPage.carousel.next')"
+        >
           <figure
             v-for="panel in panels"
             :key="panel.caption"
@@ -58,7 +64,7 @@
               class="block h-[min(52vw,260px)] w-full object-cover object-left-top"
             >
           </figure>
-        </div>
+        </ErpCarousel>
       </div>
 
       <div class="reveal reveal-delay-2 relative mt-10 hidden lg:mt-16 lg:mb-8 lg:block lg:min-h-[640px]">

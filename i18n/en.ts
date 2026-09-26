@@ -23,12 +23,23 @@ export const en = {
   hero: {
     kicker: "We are NexaXTech",
     headline: "We build software around real business problems.",
-    body: "NexaX ERP is our flagship. We start from the work a business already does, then build the tool around it.",
+    body: "We start from the work a business already does, then build the tool around it.",
     myanmar: "တကယ်ရှိတဲ့ Business Problem တွေကနေ စတင်ပါတယ်။",
     primary: "Explore Products",
     secondary: "See what we do",
-    imageAlt: "A laptop on a desk showing a business dashboard",
+    imageAlt: "NexaX ERP dashboard themes — Classic, Purple, Magenta, Orange and Cygan",
     visualTitle: "NexaX ERP",
+    themesLabel: "ERP themes",
+    themeClassic: "Classic",
+    themePurple: "Purple",
+    themeMagenta: "Magenta",
+    themeOrange: "Orange",
+    themeCygan: "Cygan",
+    themeClassicAlt: "NexaX ERP Classic theme dashboard",
+    themePurpleAlt: "NexaX ERP Purple theme dashboard",
+    themeMagentaAlt: "NexaX ERP Magenta theme dashboard",
+    themeOrangeAlt: "NexaX ERP Orange theme dashboard",
+    themeCyganAlt: "NexaX ERP Cygan theme dashboard",
   },
   erp: {
     kicker: "Our flagship product",
@@ -40,6 +51,7 @@ export const en = {
     visualLabel: "Product preview",
     visualHint: "Watch the product",
     play: "Play preview",
+    themesLine: "One product. Multiple looks — Classic, Purple, Magenta, Orange, Cygan.",
   },
   teaser: {
     title: "More than a POS.",
@@ -241,6 +253,10 @@ export const en = {
     rateLimited: "Too many requests. Please wait a few minutes and try again.",
   },
   erpPage: {
+    carousel: {
+      prev: "Previous",
+      next: "Next",
+    },
     metaTitle: "NexaX ERP",
     metaDescription:
       "Sales, inventory, finance and reports — connected in one system.",

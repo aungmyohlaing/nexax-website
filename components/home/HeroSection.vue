@@ -9,7 +9,7 @@
       <div class="hero-dots" />
     </div>
     <div class="page-shell pt-8 pb-16 md:pt-10 md:pb-20 lg:pt-12 lg:pb-24">
-      <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-center lg:gap-10">
+      <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:items-center lg:gap-12">
         <div class="hero-copy max-w-xl">
           <p class="reveal font-body text-[12px] md:text-[13px] font-semibold tracking-[0.18em] uppercase text-[color:var(--color-gold)]">
             {{ t("hero.kicker") }}
@@ -35,13 +35,7 @@
         </div>
 
         <div class="reveal reveal-delay-2 hero-visual">
-          <img
-            src="/images/product_desk.png"
-            :alt="t('hero.imageAlt')"
-            width="1536"
-            height="1024"
-            class="hero-photo"
-          >
+          <HeroProductVisual />
         </div>
       </div>
     </div>

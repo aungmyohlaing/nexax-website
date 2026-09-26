@@ -16,7 +16,7 @@
           <span class="erp-callout">{{ t("erpPage.sales.items") }}</span>
         </div>
 
-        <figure class="erp-depth relative overflow-hidden rounded-[20px] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] sm:rounded-[24px]">
+        <figure class="erp-depth overflow-hidden rounded-[20px] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] sm:rounded-[24px]">
           <img
             src="/images/erp/sale-create.png"
             :alt="t('erpPage.sales.imageAlt')"
@@ -26,18 +26,17 @@
             decoding="async"
             class="block h-[min(58vw,320px)] w-full object-cover object-left-top sm:h-auto lg:h-auto lg:object-contain"
           >
-          <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[color:var(--color-surface)] via-[color:var(--color-surface)/0.9] to-transparent px-4 pb-4 pt-12 lg:hidden">
-            <div class="erp-flow-rail">
-              <span
-                v-for="label in mobileLabels"
-                :key="label"
-                class="erp-flow-chip font-body text-[12px] font-semibold uppercase tracking-[0.1em] text-[color:var(--color-text)]"
-              >
-                {{ label }}
-              </span>
-            </div>
-          </div>
         </figure>
+
+        <ul class="erp-tag-wrap mt-4 lg:hidden">
+          <li
+            v-for="label in mobileLabels"
+            :key="label"
+            class="erp-tag"
+          >
+            {{ label }}
+          </li>
+        </ul>
 
         <div class="mt-4 hidden items-center justify-between gap-3 px-[4%] lg:flex">
           <span class="erp-callout">{{ t("erpPage.sales.quantity") }}</span>

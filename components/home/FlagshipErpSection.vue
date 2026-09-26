@@ -12,13 +12,16 @@
           <p class="mt-5 font-body text-[16px] md:text-[17px] leading-8 text-[color:var(--color-on-dark-soft)] max-w-md">
             {{ t("erp.lead") }}
           </p>
+          <p class="mt-3 font-body text-[14px] leading-7 text-[color:var(--color-on-dark-soft)] max-w-md">
+            {{ t("erp.themesLine") }}
+          </p>
           <div class="mt-8">
             <BaseButton variant="mint" to="/erp">
               {{ t("erp.cta") }}
             </BaseButton>
           </div>
         </div>
-        <div class="rounded-[28px] bg-[color:var(--color-stage-soft)] p-5 md:p-6">
+        <div class="rounded-[28px] bg-[color:var(--color-stage-soft)] p-4 md:p-5">
           <ProductPreview />
         </div>
       </div>

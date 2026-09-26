@@ -6,8 +6,13 @@
       </h2>
 
       <div class="reveal reveal-delay-1 erp-bleed mt-8 lg:hidden">
-        <ol class="erp-rail px-[var(--page-pad)]">
-          <li
+        <ErpCarousel
+          rail-class="px-[var(--page-pad)]"
+          :aria-label="t('erpPage.connected.title')"
+          :prev-label="t('erpPage.carousel.prev')"
+          :next-label="t('erpPage.carousel.next')"
+        >
+          <article
             v-for="(step, index) in steps"
             :key="step.name"
             class="w-[78%] rounded-[24px] border border-[color:var(--color-border)] bg-[color:var(--color-surface)] p-5 shadow-card"
@@ -21,14 +26,8 @@
             <p class="mt-2 font-body text-[14px] leading-[1.5] text-[color:var(--color-text-soft)]">
               {{ step.detail }}
             </p>
-            <p
-              v-if="index < steps.length - 1"
-              class="mt-4 font-body text-[12px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-primary)]"
-            >
-              {{ t("erpPage.connected.nextHint") }}
-            </p>
-          </li>
-        </ol>
+          </article>
+        </ErpCarousel>
       </div>
 
       <ol class="mt-16 hidden lg:grid lg:grid-cols-4">

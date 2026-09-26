@@ -132,10 +132,109 @@ html[lang="my"] .hero-copy p {
   filter: drop-shadow(0 18px 40px color-mix(in srgb, var(--color-stage) 18%, transparent));
 }
 
+.hero-showcase {
+  position: relative;
+  padding: 8px 28px 44px 0;
+}
+
+.hero-showcase-stack {
+  position: absolute;
+  inset: 8px 28px 44px 0;
+  pointer-events: none;
+}
+
+.hero-showcase-card {
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: 0 22px 48px color-mix(in srgb, var(--color-stage) 16%, transparent);
+}
+
+.hero-showcase-depth {
+  position: absolute;
+  inset: 0;
+  transform-origin: right center;
+  transition: transform 0.55s ease, opacity 0.55s ease;
+}
+
+.hero-showcase-depth img,
+.hero-showcase-front img {
+  display: block;
+  width: 100%;
+  height: min(52vw, 320px);
+  object-fit: cover;
+  object-position: left top;
+}
+
+.hero-showcase-front {
+  position: relative;
+  z-index: 20;
+  transition: opacity 0.35s ease;
+}
+
+.hero-showcase-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 12px 16px;
+}
+
+.hero-showcase-swatches {
+  position: absolute;
+  left: 0;
+  bottom: 8px;
+  z-index: 24;
+  display: flex;
+  gap: 8px;
+}
+
+.hero-showcase-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 2px solid var(--color-surface);
+  background: var(--swatch);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-border) 80%, transparent);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-showcase-swatch-active {
+  transform: scale(1.18);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-border) 80%, transparent),
+    0 0 0 4px color-mix(in srgb, var(--swatch) 28%, transparent);
+}
+
+.product-modal-scrim {
+  background: color-mix(in srgb, var(--color-stage) 78%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.product-modal-panel {
+  box-shadow: 0 28px 80px color-mix(in srgb, #000 42%, transparent);
+}
+
+@media (min-width: 768px) {
+  .hero-showcase-depth img,
+  .hero-showcase-front img {
+    height: 340px;
+  }
+}
+
 @media (min-width: 1024px) {
   .hero-visual {
     width: calc(100% + clamp(16px, 3.5vw, 40px));
     margin-right: calc(clamp(16px, 3.5vw, 40px) * -1);
+  }
+
+  .hero-showcase-depth img,
+  .hero-showcase-front img {
+    height: 380px;
   }
 }
 
@@ -268,17 +367,170 @@ html[lang="my"] .erp-hero-copy p {
   box-shadow: 0 12px 28px color-mix(in srgb, var(--color-stage) 14%, transparent);
 }
 
-.erp-flow-rail {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding-bottom: 4px;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+.erp-carousel {
+  position: relative;
 }
 
-.erp-flow-rail::-webkit-scrollbar {
-  display: none;
+.erp-carousel-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: -8px;
+  padding-inline: var(--page-pad);
+}
+
+.erp-carousel-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-soft);
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.erp-carousel-nav-btn:disabled {
+  opacity: 0.28;
+  pointer-events: none;
+}
+
+.erp-carousel-nav-btn:not(:disabled):active {
+  color: var(--color-text);
+}
+
+.erp-carousel-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.erp-carousel-dot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-border);
+  transition: width 0.2s ease, background 0.2s ease;
+}
+
+.erp-carousel-dot-active {
+  width: 16px;
+  background: var(--color-primary);
+}
+
+/* Non-scrolling step / tag layouts on mobile */
+.erp-step-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: center;
+}
+
+.erp-step-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  font-family: Inter, "Noto Sans Myanmar", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.erp-step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.erp-step-num-primary {
+  background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  color: var(--color-primary);
+}
+
+.erp-step-num-gold {
+  background: color-mix(in srgb, var(--color-gold) 20%, transparent);
+  color: var(--color-gold);
+}
+
+.erp-step-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--color-border);
+  flex-shrink: 0;
+}
+
+.erp-tag-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.erp-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-family: Inter, "Noto Sans Myanmar", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+.erp-tag-dark {
+  border-color: color-mix(in srgb, var(--color-on-dark) 18%, transparent);
+  background: color-mix(in srgb, var(--color-stage-soft) 80%, transparent);
+  color: var(--color-on-dark);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 13px;
+  border-radius: 999px;
+}
+
+.erp-seg-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.erp-seg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  flex: 0 1 calc(50% - 4px);
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-family: Inter, "Noto Sans Myanmar", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.erp-seg-active {
+  border-color: var(--color-stage);
+  background: var(--color-stage);
+  color: var(--color-on-dark);
 }
 
 .erp-flow-chip {
@@ -353,6 +605,10 @@ html[lang="my"] .erp-hero-copy p {
   .hero-pattern,
   .hero-dots {
     transform: none !important;
+  }
+
+  .hero-showcase-depth {
+    transition: none;
   }
 }
 

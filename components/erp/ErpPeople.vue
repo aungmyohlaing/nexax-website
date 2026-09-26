@@ -8,26 +8,26 @@
       <div class="mt-8 lg:mt-14 lg:grid lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:items-start lg:gap-10">
         <div>
           <div
-            class="reveal erp-bleed lg:overflow-visible"
+            class="reveal"
             role="tablist"
             :aria-label="t('erpPage.people.title')"
           >
-            <div class="erp-flow-rail px-[var(--page-pad)] lg:flex-col lg:overflow-visible lg:px-0">
+            <div class="erp-seg-wrap lg:flex-col lg:gap-2">
               <button
                 v-for="role in roles"
                 :key="role.id"
                 type="button"
                 role="tab"
-                class="min-h-[44px] shrink-0 rounded-full border px-4 py-2 text-left transition-colors lg:w-full"
+                class="erp-seg text-left transition-colors lg:w-full lg:flex-none lg:justify-start lg:rounded-full lg:px-4 lg:py-2"
                 :class="role.id === selectedId
-                  ? 'border-[color:var(--color-stage)] bg-[color:var(--color-stage)] text-[color:var(--color-on-dark)]'
-                  : 'border-[color:var(--color-border)] bg-[color:var(--color-surface)] text-[color:var(--color-text)]'"
+                  ? 'erp-seg-active lg:border-[color:var(--color-stage)] lg:bg-[color:var(--color-stage)] lg:text-[color:var(--color-on-dark)]'
+                  : 'lg:border-[color:var(--color-border)] lg:bg-[color:var(--color-surface)] lg:text-[color:var(--color-text)]'"
                 :aria-selected="role.id === selectedId"
                 @click="choose(role.id)"
               >
-                <span class="block font-heading text-[15px] font-semibold">{{ role.name }}</span>
+                <span class="block font-heading text-[14px] font-semibold lg:text-[15px]">{{ role.name }}</span>
                 <span
-                  class="mt-0.5 block font-body text-[13px]"
+                  class="mt-0.5 hidden font-body text-[13px] lg:block"
                   :class="role.id === selectedId ? 'text-[color:var(--color-on-dark-soft)]' : 'text-[color:var(--color-text-soft)]'"
                 >
                   {{ role.hint }}
@@ -36,13 +36,18 @@
             </div>
           </div>
           <p class="reveal reveal-delay-1 mt-4 font-body text-[14px] leading-[1.55] text-[color:var(--color-text-soft)] md:text-[15px]" aria-live="polite">
-            {{ selected?.name }} — {{ t("erpPage.people.note") }}
+            {{ selected?.name }} — {{ selected?.hint }}. {{ t("erpPage.people.note") }}
           </p>
         </div>
 
         <div class="reveal reveal-delay-2 mt-6 min-w-0 lg:mt-0">
           <div class="erp-bleed lg:hidden">
-            <div class="erp-rail px-[var(--page-pad)]">
+            <ErpCarousel
+              rail-class="px-[var(--page-pad)]"
+              :aria-label="t('erpPage.people.title')"
+              :prev-label="t('erpPage.carousel.prev')"
+              :next-label="t('erpPage.carousel.next')"
+            >
               <figure class="erp-depth w-[88%] overflow-hidden rounded-[20px] border border-[color:var(--color-border)] bg-[color:var(--color-surface)]">
                 <img
                   src="/images/erp/roles.png"
@@ -72,7 +77,7 @@
                   class="block h-[min(50vw,250px)] w-full object-cover object-left-top"
                 >
               </figure>
-            </div>
+            </ErpCarousel>
           </div>
 
           <div class="relative hidden min-w-0 lg:block lg:pb-16">
