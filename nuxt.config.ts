@@ -19,6 +19,9 @@ export default defineNuxtConfig({
     resendTo: SITE.contactEmail,
     public: {
       siteUrl: SITE.siteUrl,
+      // Official container for www.nexaxtech.com. Override with NUXT_PUBLIC_GTM_ID.
+      // An empty or invalid value omits the snippet.
+      gtmId: "GTM-PQP878R2",
     },
   },
   routeRules: {

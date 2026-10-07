@@ -1,6 +1,28 @@
 # NexaX Website
 
-Public NexaXTech marketing site (Nuxt 4). Hosted on **Google Cloud Run**.
+Public NexaXTech marketing site (Nuxt 4, SSR). Hosted on **Google Cloud Run**.
+
+Canonical origin: **https://www.nexaxtech.com**
+
+## Pages
+
+| Route | What it is |
+|-------|------------|
+| `/` | Home |
+| `/erp` | NexaX ERP product page (demo request) |
+| `/regify` | 301 to https://regify.nexaxtech.com |
+
+Copy is English and Myanmar. The visitor’s choice is stored in the `nexax-preferred-locale` cookie.
+
+## Canonical host
+
+`nexaxtech.com` (apex only) returns **301** to the same path and query on `https://www.nexaxtech.com`. The check uses `Host` and `X-Forwarded-Host`. Other hosts, including `www` and Cloud Run URLs, are left alone.
+
+The redirect is a Nitro plugin (`server/plugins/canonical-www.ts`) so it runs before static files. Do not prerender `/` or `/erp`. A prerendered HTML asset is served as 200 and never hits the redirect.
+
+```bash
+npm test   # server/utils/canonicalHost.test.mjs
+```
 
 ## Local
 
@@ -10,12 +32,19 @@ cp .env.example .env   # add Resend keys for demo forms
 npm run dev            # http://localhost:3002
 ```
 
-Demo / contact forms POST to `/api/demo` and email via **Resend** (not `mailto`).
+Demo and contact forms POST to `/api/demo` and email via **Resend**. The site does not call the ERP API.
 
-Abuse controls on the API:
+| Env | Required | Notes |
+|-----|----------|--------|
+| `RESEND_API_KEY` | yes | Server only. Not a `NUXT_PUBLIC_*` value |
+| `RESEND_FROM` | yes | Verified sender, e.g. `NexaXTech <noreply@nexaxtech.com>` |
+| `RESEND_TO` | no | Defaults to `amhlaing@gmail.com` |
+
+`/api/demo` accepts `source: "erp"` (company, phone, email, business) or `source: "contact"` (name, business, phone). Abuse controls:
+
 - 3 requests / IP / 15 minutes
-- honeypot field
-- same email/phone dedupe for 1 hour
+- honeypot field (`website`) — filled requests return success and do not email
+- same email or phone deduped for 1 hour
 
 ## Docker (smoke test before Cloud Run)
 
