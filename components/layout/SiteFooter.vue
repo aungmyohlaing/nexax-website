@@ -3,7 +3,7 @@
     <div class="page-shell py-12 md:py-16 flex flex-col gap-10">
       <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
         <div class="flex flex-col gap-4">
-          <NuxtLink to="/" class="shrink-0 self-start" :aria-label="SITE.fullName">
+          <NuxtLink :to="paths.home" class="shrink-0 self-start" :aria-label="SITE.fullName">
             <BrandLockup on-dark />
           </NuxtLink>
           <div class="font-body text-[14px] grid gap-1.5">
@@ -24,10 +24,10 @@
 
         <div class="flex flex-col items-start md:items-end gap-6">
           <nav class="flex flex-wrap gap-x-6 gap-y-3 font-body text-[14px] md:justify-end">
-            <NuxtLink to="/erp" class="hover:text-[color:var(--color-on-dark)]">{{ t("footer.products") }}</NuxtLink>
-            <a href="/#clients" class="hover:text-[color:var(--color-on-dark)]">{{ t("footer.clients") }}</a>
-            <a href="/#about" class="hover:text-[color:var(--color-on-dark)]">{{ t("footer.about") }}</a>
-            <a href="/#contact" class="hover:text-[color:var(--color-on-dark)]">{{ t("footer.contact") }}</a>
+            <NuxtLink :to="paths.erp" class="hover:text-[color:var(--color-on-dark)]">{{ t("footer.products") }}</NuxtLink>
+            <a :href="paths.clients" class="hover:text-[color:var(--color-on-dark)]">{{ t("footer.clients") }}</a>
+            <a :href="paths.about" class="hover:text-[color:var(--color-on-dark)]">{{ t("footer.about") }}</a>
+            <a :href="paths.contact" class="hover:text-[color:var(--color-on-dark)]">{{ t("footer.contact") }}</a>
           </nav>
           <div class="flex items-center gap-3">
             <a
@@ -78,6 +78,6 @@
 <script setup lang="ts">
 import { SITE } from "~/constants/site"
 
-const { t, setLocale } = useLocale()
+const { t, setLocale, paths } = useLocale()
 const year = new Date().getFullYear()
 </script>

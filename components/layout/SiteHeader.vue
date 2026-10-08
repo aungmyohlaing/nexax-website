@@ -6,7 +6,7 @@
   >
     <div class="page-shell flex items-center justify-between h-[76px] gap-4">
       <NuxtLink
-        to="/"
+        :to="paths.home"
         class="shrink-0 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--color-primary)] focus-visible:ring-offset-2"
         :class="onDark
           ? 'focus-visible:ring-offset-[color:var(--color-stage)]'
@@ -40,7 +40,7 @@
           >
             <div class="min-w-[220px] rounded-[20px] bg-[color:var(--color-surface)] text-[color:var(--color-text)] p-2 shadow-card">
               <NuxtLink
-                to="/erp"
+                :to="paths.erp"
                 class="block rounded-[14px] px-4 py-3 hover:bg-[color:var(--color-mint-wash)] transition-colors"
                 @click="productsOpen = false"
               >
@@ -60,12 +60,12 @@
           </div>
         </div>
         <a
-          href="/#clients"
+          :href="paths.clients"
           class="transition-colors"
           :class="onDark ? 'hover:text-[color:var(--color-gold)]' : 'hover:text-[color:var(--color-primary)]'"
         >{{ t("nav.clients") }}</a>
         <a
-          href="/#about"
+          :href="paths.about"
           class="transition-colors"
           :class="onDark ? 'hover:text-[color:var(--color-gold)]' : 'hover:text-[color:var(--color-primary)]'"
         >{{ t("nav.about") }}</a>
@@ -119,7 +119,7 @@
         </BaseButton>
         <BaseButton
           v-else
-          href="/#contact"
+          :href="paths.contact"
           size="sm"
           :variant="onDark ? 'mint' : 'dark'"
         >
@@ -145,7 +145,7 @@
       >
         <div class="page-shell flex items-center justify-between h-[76px]">
           <NuxtLink
-            to="/"
+            :to="paths.home"
             class="shrink-0"
             :aria-label="SITE.fullName"
             @click="mobileOpen = false"
@@ -162,15 +162,15 @@
           </button>
         </div>
         <nav class="page-shell flex flex-col gap-6 pt-8 pb-12 font-body text-[20px] font-medium">
-          <NuxtLink to="/erp" @click="mobileOpen = false">{{ t("nav.erp") }}</NuxtLink>
+          <NuxtLink :to="paths.erp" @click="mobileOpen = false">{{ t("nav.erp") }}</NuxtLink>
           <a
             :href="SITE.regifyUrl"
             target="_blank"
             rel="noopener noreferrer"
             @click="mobileOpen = false"
           >{{ t("nav.regify") }}</a>
-          <a href="/#clients" @click="mobileOpen = false">{{ t("nav.clients") }}</a>
-          <a href="/#about" @click="mobileOpen = false">{{ t("nav.about") }}</a>
+          <a :href="paths.clients" @click="mobileOpen = false">{{ t("nav.clients") }}</a>
+          <a :href="paths.about" @click="mobileOpen = false">{{ t("nav.about") }}</a>
           <div class="flex items-center gap-3 text-[16px] text-[color:var(--color-text-soft)]">
             <button type="button" @click="setLocale('en')">{{ t("lang.en") }}</button>
             <span>/</span>
@@ -179,7 +179,7 @@
           <BaseButton v-if="isErpPage" @click="openErpDemo">
             {{ t("nav.talk") }}
           </BaseButton>
-          <BaseButton v-else href="/#contact" @click="mobileOpen = false">
+          <BaseButton v-else :href="paths.contact" @click="mobileOpen = false">
             {{ t("nav.talk") }}
           </BaseButton>
         </nav>
@@ -192,7 +192,7 @@
 import type { Locale } from "~/types/locale"
 import { SITE } from "~/constants/site"
 
-const { t, locale, setLocale } = useLocale()
+const { t, locale, setLocale, paths } = useLocale()
 const route = useRoute()
 const { show: showErpDemo } = useErpDemoModal()
 const headerRef = ref<HTMLElement | null>(null)
@@ -202,7 +202,10 @@ const mobileOpen = ref(false)
 const onDark = ref(false)
 let frame = 0
 
-const isErpPage = computed(() => route.path === "/erp" || route.path.startsWith("/erp/"))
+const isErpPage = computed(() => {
+  const path = route.path.length > 1 ? route.path.replace(/\/$/, "") : route.path
+  return path === "/erp" || path === "/my/erp"
+})
 
 const openErpDemo = () => {
   mobileOpen.value = false

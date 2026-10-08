@@ -9,7 +9,7 @@
           {{ t("teaser.body") }}
         </p>
         <div class="reveal reveal-delay-2 mt-8">
-          <BaseButton variant="mint" to="/erp">
+          <BaseButton variant="mint" :to="paths.erp">
             {{ t("teaser.cta") }}
           </BaseButton>
         </div>
@@ -22,5 +22,5 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useLocale()
+const { t, paths } = useLocale()
 </script>

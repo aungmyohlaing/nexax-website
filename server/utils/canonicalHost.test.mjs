@@ -3,9 +3,13 @@ import { describe, it } from "node:test"
 import {
   APEX_HOSTNAME,
   CANONICAL_ORIGIN,
+  buildErpCanonicalUrl,
+  buildTrailingSlashCanonicalUrl,
   buildWwwRedirectUrl,
   normalizeHostname,
   shouldRedirectApexToWww,
+  shouldRedirectErpTrailingSlash,
+  trailingSlashTarget,
 } from "./canonicalHost.mjs"
 
 describe("normalizeHostname", () => {
@@ -56,6 +60,47 @@ describe("buildWwwRedirectUrl", () => {
     assert.equal(
       buildWwwRedirectUrl("/contact?source=facebook"),
       `${CANONICAL_ORIGIN}/contact?source=facebook`,
+    )
+  })
+})
+
+describe("ERP trailing slash", () => {
+  it("matches only /erp/", () => {
+    assert.equal(shouldRedirectErpTrailingSlash("/erp/"), true)
+    assert.equal(shouldRedirectErpTrailingSlash("/erp"), false)
+    assert.equal(shouldRedirectErpTrailingSlash("/"), false)
+    assert.equal(shouldRedirectErpTrailingSlash("/erp/extra"), false)
+  })
+
+  it("builds the slash-free www URL and keeps the query", () => {
+    assert.equal(buildErpCanonicalUrl(""), `${CANONICAL_ORIGIN}/erp`)
+    assert.equal(buildErpCanonicalUrl("?"), `${CANONICAL_ORIGIN}/erp`)
+    assert.equal(
+      buildErpCanonicalUrl("?source=facebook"),
+      `${CANONICAL_ORIGIN}/erp?source=facebook`,
+    )
+  })
+})
+
+describe("localized trailing slash", () => {
+  it("301 targets are only the known slash copies", () => {
+    assert.equal(trailingSlashTarget("/erp/"), "/erp")
+    assert.equal(trailingSlashTarget("/my/"), "/my")
+    assert.equal(trailingSlashTarget("/my/erp/"), "/my/erp")
+    assert.equal(trailingSlashTarget("/my/erp"), null)
+    assert.equal(trailingSlashTarget("/my"), null)
+    assert.equal(trailingSlashTarget("/"), null)
+    assert.equal(shouldRedirectErpTrailingSlash("/my/erp/"), false)
+  })
+
+  it("builds www URLs and keeps the query", () => {
+    assert.equal(
+      buildTrailingSlashCanonicalUrl("/my/erp/", "?source=facebook"),
+      `${CANONICAL_ORIGIN}/my/erp?source=facebook`,
+    )
+    assert.equal(
+      buildTrailingSlashCanonicalUrl("/my/", ""),
+      `${CANONICAL_ORIGIN}/my`,
     )
   })
 })

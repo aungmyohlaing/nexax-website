@@ -36,7 +36,7 @@
           {{ t("why.closing") }}
         </p>
         <div class="mt-8 flex flex-col sm:flex-row sm:items-center gap-5">
-          <BaseButton to="/erp">
+          <BaseButton :to="paths.erp">
             {{ t("nav.erp") }}
           </BaseButton>
           <BaseButton variant="ghost" :href="SITE.regifyUrl" external>
@@ -52,6 +52,6 @@
 <script setup lang="ts">
 import { SITE, WHY_PRINCIPLES } from "~/constants/site"
 
-const { t } = useLocale()
+const { t, paths } = useLocale()
 const principles = WHY_PRINCIPLES
 </script>

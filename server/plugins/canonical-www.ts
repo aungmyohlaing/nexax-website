@@ -1,5 +1,6 @@
 import { getRequestHeader, getRequestURL, sendRedirect } from "h3"
 import {
+  buildTrailingSlashCanonicalUrl,
   buildWwwRedirectUrl,
   shouldRedirectApexToWww,
 } from "../utils/canonicalHost.mjs"
@@ -14,6 +15,15 @@ export default defineNitroPlugin((nitroApp) => {
   nitroApp.h3App.stack.unshift({
     route: "/",
     handler: defineEventHandler((event) => {
+      const url = getRequestURL(event)
+
+      // Fold trailing-slash copies onto the canonical URL before the apex
+      // check, so www and apex both land on the slash-free www URL in one hop.
+      const slashTarget = buildTrailingSlashCanonicalUrl(url.pathname, url.search)
+      if (slashTarget) {
+        return sendRedirect(event, slashTarget, 301)
+      }
+
       const host = getRequestHeader(event, "host")
       const forwarded = getRequestHeader(event, "x-forwarded-host")
       if (
@@ -23,7 +33,6 @@ export default defineNitroPlugin((nitroApp) => {
         return
       }
 
-      const url = getRequestURL(event)
       const target = buildWwwRedirectUrl(`${url.pathname}${url.search}`)
       return sendRedirect(event, target, 301)
     }),

@@ -17,7 +17,7 @@
           {{ t("pillars.cardBody") }}
         </p>
         <div class="mt-8">
-          <BaseButton to="/erp">
+          <BaseButton :to="paths.erp">
             {{ t("pillars.cta") }}
           </BaseButton>
         </div>
@@ -27,5 +27,5 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useLocale()
+const { t, paths } = useLocale()
 </script>

@@ -1,8 +1,22 @@
 export const en = {
   meta: {
-    title: "NexaXTech — software around real business problems",
+    title: "NexaX ERP for shops in Myanmar | NexaXTech",
     description:
-      "NexaXTech builds software around real business problems. NexaX ERP is our flagship product.",
+      "NexaXTech builds NexaX ERP for Myanmar businesses. Sales, inventory, and finance stay in one system, including multi-shop stock and offline selling. Request a demo.",
+  },
+  error: {
+    notFoundTitle: "Page not found | NexaXTech",
+    notFoundDescription:
+      "This page is not on the NexaXTech site. Visit the homepage or explore NexaX ERP.",
+    notFoundHeading: "Page not found",
+    notFoundBody: "The link may be out of date, or the page may have moved.",
+    home: "Back to homepage",
+    erp: "Explore NexaX ERP",
+    genericTitle: "Something went wrong | NexaXTech",
+    genericDescription:
+      "This page could not be loaded. Visit the NexaXTech homepage or explore NexaX ERP.",
+    genericHeading: "Something went wrong",
+    genericBody: "Please try again, or go back to a page that is available.",
   },
   nav: {
     products: "Products",
@@ -257,9 +271,9 @@ export const en = {
       prev: "Previous",
       next: "Next",
     },
-    metaTitle: "NexaX ERP",
+    metaTitle: "NexaX ERP — sales, inventory, and finance | NexaXTech",
     metaDescription:
-      "Sales, inventory, finance and reports — connected in one system.",
+      "NexaX ERP connects each sale to stock, shop transfers, offline selling, and business reports. Built for shops in Myanmar. Request a working demo.",
     explore: "Explore NexaX ERP",
     requestDemo: "Request demo",
     watch: "Watch demo",

@@ -42,17 +42,12 @@ export default defineNuxtConfig({
         lang: "en",
       },
       meta: [
-        {
-          name: "description",
-          content: "NexaXTech builds software around real business problems.",
-        },
         { name: "theme-color", content: "#FCFAF7" },
       ],
+      // Page titles, descriptions, and canonical URLs are set per route.
+      // A homepage canonical here is inherited by error.vue and would
+      // point 404s at /.
       link: [
-        {
-          rel: "canonical",
-          href: `${SITE.siteUrl}/`,
-        },
         {
           rel: "icon",
           type: "image/png",

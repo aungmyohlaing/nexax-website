@@ -37,3 +37,37 @@ export const buildWwwRedirectUrl = (pathWithQuery) => {
   const path = pathWithQuery.startsWith("/") ? pathWithQuery : `/${pathWithQuery}`
   return `${CANONICAL_ORIGIN}${path}`
 }
+
+/** Pathnames that 301 to the same page without the trailing slash. */
+const TRAILING_SLASH_TARGETS = {
+  "/erp/": "/erp",
+  "/my/": "/my",
+  "/my/erp/": "/my/erp",
+}
+
+/** Slash-free target path, or null when this pathname should not redirect. */
+export const trailingSlashTarget = (pathname) =>
+  TRAILING_SLASH_TARGETS[pathname] ?? null
+
+/**
+ * Canonical www URL for a trailing-slash variant, preserving the query string.
+ * @param {string} pathname
+ * @param {string} [search] value of `URL.search` (`""` or `"?a=1"`)
+ */
+export const buildTrailingSlashCanonicalUrl = (pathname, search = "") => {
+  const target = trailingSlashTarget(pathname)
+  if (!target) return null
+  const query = search && search !== "?" ? search : ""
+  return `${CANONICAL_ORIGIN}${target}${query}`
+}
+
+/** True for `/erp/` and not for `/erp`, `/`, or deeper paths. */
+export const shouldRedirectErpTrailingSlash = (pathname) =>
+  trailingSlashTarget(pathname) === "/erp"
+
+/**
+ * Canonical ERP URL on the www origin, preserving a query string.
+ * @param {string} [search] value of `URL.search` (`""` or `"?a=1"`)
+ */
+export const buildErpCanonicalUrl = (search = "") =>
+  buildTrailingSlashCanonicalUrl("/erp/", search)

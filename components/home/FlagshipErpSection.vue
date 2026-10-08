@@ -16,7 +16,7 @@
             {{ t("erp.themesLine") }}
           </p>
           <div class="mt-8">
-            <BaseButton variant="mint" to="/erp">
+            <BaseButton variant="mint" :to="paths.erp">
               {{ t("erp.cta") }}
             </BaseButton>
           </div>
@@ -30,5 +30,5 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useLocale()
+const { t, paths } = useLocale()
 </script>
