@@ -1,8 +1,8 @@
 export const en = {
   meta: {
-    title: "NexaX ERP for shops in Myanmar | NexaXTech",
+    title: "NexaXTech — Software for Myanmar Businesses",
     description:
-      "NexaXTech builds NexaX ERP for Myanmar businesses. Sales, inventory, and finance stay in one system, including multi-shop stock and offline selling. Request a demo.",
+      "NexaXTech builds practical software around real business problems in Myanmar, including NexaX ERP for shops and Regify for event registration.",
   },
   error: {
     notFoundTitle: "Page not found | NexaXTech",
@@ -273,7 +273,7 @@ export const en = {
     },
     metaTitle: "NexaX ERP — sales, inventory, and finance | NexaXTech",
     metaDescription:
-      "NexaX ERP connects each sale to stock, shop transfers, offline selling, and business reports. Built for shops in Myanmar. Request a working demo.",
+      "NexaX ERP connects each sale to stock, cost, and shop finance. FIFO or actual batch, stock transfers, and offline sync for shops in Myanmar.",
     explore: "Explore NexaX ERP",
     requestDemo: "Request demo",
     watch: "Watch demo",
@@ -302,13 +302,13 @@ export const en = {
     hero: {
       title: "NexaX ERP",
       statement: "Your business, connected.",
-      body: "Sales, inventory, finance and reports — connected in one system.",
+      body: "A sale stays connected to stock, its cost, and the shop's finance and reports.",
       imageAlt:
         "NexaX ERP dashboard showing sales, profit, expenses, and shop performance",
     },
     video: {
       kicker: "Inside the product",
-      body: "From a sale to inventory, finance and reports — one connected flow.",
+      body: "See how a shop records a sale and keeps the stock behind it in the same system.",
       label: "NexaX ERP product demo",
     },
     connected: {
@@ -325,7 +325,7 @@ export const en = {
     },
     sales: {
       title: "Every sale starts here.",
-      body: "Capture the customer, items, pricing, discounts and payment in one transaction.",
+      body: "Record the customer, the items, and the payment in one sale. The stock that moves stays with that sale.",
       imageAlt: "NexaX ERP sale form with customer, items, pricing and payment",
       customer: "Customer",
       items: "Items",
@@ -336,6 +336,7 @@ export const en = {
     },
     inventory: {
       title: "Stock has a history.",
+      cost: "A shop can cost stock with FIFO or actual batch. FIFO uses the oldest stock first. Actual batch uses the lot you select. A report compares the margin under both.",
       purchase: "Purchase",
       stockIn: "Stock in",
       transfer: "Transfer",
@@ -351,14 +352,14 @@ export const en = {
       main: "Main Shop",
       transfer: "Stock transfer",
       branch: "Branch Shop",
-      line: "Move stock between shops while keeping every location up to date.",
+      line: "Run more than one shop, and transfer stock between them so each location stays up to date.",
       dashAlt:
         "NexaX ERP dashboard comparing shops, including Main Shop and Branch Shop",
       transferAlt: "NexaX ERP stock transfer to Branch Shop",
     },
     offline: {
       title: "No connection? Keep working.",
-      body: "Sales stay on this device, then sync when the connection returns.",
+      body: "If the connection drops, selling can continue on this device. Those sales sync when the connection returns.",
       online: "Online",
       offline: "Offline",
       working: "Keep working",

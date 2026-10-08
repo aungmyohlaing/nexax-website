@@ -4,6 +4,9 @@
       <h2 class="reveal max-w-2xl font-heading text-[28px] font-semibold leading-[1.15] md:text-[44px]">
         {{ t("erpPage.inventory.title") }}
       </h2>
+      <p class="reveal reveal-delay-1 mt-3 max-w-xl font-body text-[15px] leading-[1.55] text-[color:var(--color-text-soft)] md:mt-4 md:text-[18px]">
+        {{ t("erpPage.inventory.cost") }}
+      </p>
 
       <div class="reveal reveal-delay-1 mt-6 lg:hidden">
         <ol class="erp-step-wrap" aria-label="Inventory flow">
