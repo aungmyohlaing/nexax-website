@@ -2,7 +2,12 @@
 
 Public NexaXTech marketing site (Nuxt 4, SSR). Hosted on **Google Cloud Run**.
 
-Canonical origin: **https://www.nexaxtech.com**
+| Environment | Branch | Origin |
+|-------------|--------|--------|
+| Production | `main` | https://www.nexaxtech.com |
+| Staging | `staging` | https://staging.nexaxtech.com |
+
+Full CI/CD, WIF, Secret Manager, and Cloud Run setup: **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**.
 
 ## Pages
 
@@ -12,60 +17,40 @@ Canonical origin: **https://www.nexaxtech.com**
 | `/erp` | NexaX ERP product page (demo request) |
 | `/regify` | 301 to https://regify.nexaxtech.com |
 
-Copy is English and Myanmar. The visitor’s choice is stored in the `nexax-preferred-locale` cookie.
-
 ## Canonical host
 
-`nexaxtech.com` (apex only) returns **301** to the same path and query on `https://www.nexaxtech.com`. The check uses `Host` and `X-Forwarded-Host`. Other hosts, including `www` and Cloud Run URLs, are left alone.
+Redirects use a trusted hostname allowlist and prefer the request `Host` header:
 
-The redirect is a Nitro plugin (`server/plugins/canonical-www.ts`) so it runs before static files. Do not prerender `/` or `/erp`. A prerendered HTML asset is served as 200 and never hits the redirect.
+- `nexaxtech.com` → 301 to `https://www.nexaxtech.com`
+- `www.nexaxtech.com` — production canonical
+- `staging.nexaxtech.com` — staging canonical (never redirected to www)
+- Cloud Run `*.run.app` and localhost — relative trailing-slash redirects
 
 ```bash
-npm test   # server/utils/canonicalHost.test.mjs
+npm test
 ```
 
 ## Local
 
 ```bash
-npm install
-cp .env.example .env   # add Resend keys for demo forms
+npm ci
+cp .env.example .env   # add NUXT_RESEND_* and optional public overrides
 npm run dev            # http://localhost:3002
 ```
 
-Demo and contact forms POST to `/api/demo` and email via **Resend**. The site does not call the ERP API.
+| Env | Scope | Notes |
+|-----|-------|--------|
+| `NUXT_PUBLIC_SITE_URL` | public | Staging must set `https://staging.nexaxtech.com` |
+| `NUXT_PUBLIC_GTM_ID` | public | Empty disables the snippet |
+| `NUXT_RESEND_API_KEY` | server | Required for `/api/demo` |
+| `NUXT_RESEND_FROM` | server | Verified sender |
+| `NUXT_RESEND_TO` | server | Required recipient |
 
-| Env | Required | Notes |
-|-----|----------|--------|
-| `RESEND_API_KEY` | yes | Server only. Not a `NUXT_PUBLIC_*` value |
-| `RESEND_FROM` | yes | Verified sender, e.g. `NexaXTech <noreply@nexaxtech.com>` |
-| `RESEND_TO` | no | Defaults to `amhlaing@gmail.com` |
+## CI/CD
 
-`/api/demo` accepts `source: "erp"` (company, phone, email, business) or `source: "contact"` (name, business, phone). Abuse controls:
+| Workflow | Allowed ref | Target |
+|----------|-------------|--------|
+| `.github/workflows/deploy-staging.yml` | `refs/heads/staging` | `nexax-erp-staging` / `nexax-website-staging` |
+| `.github/workflows/deploy-production.yml` | `refs/heads/main` | `nexax-erp-production` / `nexax-website` |
 
-- 3 requests / IP / 15 minutes
-- honeypot field (`website`) — filled requests return success and do not email
-- same email or phone deduped for 1 hour
-
-## Docker (smoke test before Cloud Run)
-
-```bash
-npm run docker:up    # http://localhost:3002 → container port 8080
-```
-
-Pass Resend env into the container (see `docker-compose.yml`).
-
-The image listens on **8080** (Cloud Run `PORT`).
-
-## Cloud Run
-
-Manual deploy today (no GitHub Actions yet). Infra runbook: `nexax-infrastructure` → `docs/runbooks/cloud-run-web-apps.md`.
-
-```powershell
-docker build -t asia-southeast1-docker.pkg.dev/nexax-erp-production/erp-frontend/nexax-website:v2 .
-
-docker push asia-southeast1-docker.pkg.dev/nexax-erp-production/erp-frontend/nexax-website:v2
-
-gcloud run deploy nexax-website --image asia-southeast1-docker.pkg.dev/nexax-erp-production/erp-frontend/nexax-website:v2 --region asia-southeast1 --platform managed --allow-unauthenticated --set-env-vars "RESEND_API_KEY=re_xxx,RESEND_FROM=NexaXTech <noreply@nexaxtech.com>,RESEND_TO=amhlaing@gmail.com"
-```
-
-On PowerShell, prefer `--update-env-vars` / Secret Manager for the API key so it is not left in shell history. Use a **single-line** `gcloud` command.
+Image-only deploys; configure Cloud Run env/secrets **before** the first CI run. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).

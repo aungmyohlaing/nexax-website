@@ -1,6 +1,6 @@
 import { Resend } from "resend"
-import { SITE } from "../../constants/site"
 import { clientIp, consumeRateLimit } from "../utils/rateLimit"
+import { isResendConfigured, resolveResendConfig } from "../utils/resendConfig.mjs"
 
 type DemoBody = {
   source?: "erp" | "contact"
@@ -78,13 +78,11 @@ export default defineEventHandler(async (event) => {
     return { ok: true, duplicate: true }
   }
 
-  const config = useRuntimeConfig()
-  const apiKey = String(config.resendApiKey || process.env.RESEND_API_KEY || "")
-  const from = String(config.resendFrom || process.env.RESEND_FROM || "")
-  const to = String(config.resendTo || process.env.RESEND_TO || SITE.contactEmail)
-
-  if (!apiKey || !from) {
-    console.error("[demo] Resend is not configured (RESEND_API_KEY / RESEND_FROM)")
+  // Server-only Nuxt runtime config (NUXT_RESEND_*). No legacy RESEND_* and
+  // no baked-in recipient — missing values → 503.
+  const { apiKey, from, to } = resolveResendConfig(useRuntimeConfig())
+  if (!isResendConfigured({ apiKey, from, to })) {
+    console.error("[demo] Resend is not configured (NUXT_RESEND_API_KEY / FROM / TO)")
     throw createError({
       statusCode: 503,
       statusMessage: "Email service is not configured",

@@ -5,17 +5,15 @@ type JsonLdNode = Record<string, unknown>
 const OG_IMAGE_PATH = "/brand/og-nexaxtech.png"
 const LOGO_PATH = "/favicon-192.png"
 
-const organizationId = `${SITE.siteUrl}/#organization`
-
-function organizationNode(): JsonLdNode {
+function organizationNode(siteUrl: string): JsonLdNode {
   return {
     "@type": "Organization",
-    "@id": organizationId,
+    "@id": `${siteUrl}/#organization`,
     name: SITE.fullName,
-    url: SITE.siteUrl,
+    url: siteUrl,
     logo: {
       "@type": "ImageObject",
-      url: `${SITE.siteUrl}${LOGO_PATH}`,
+      url: `${siteUrl}${LOGO_PATH}`,
       width: 192,
       height: 192,
     },
@@ -29,24 +27,24 @@ function organizationNode(): JsonLdNode {
   }
 }
 
-function websiteNode(): JsonLdNode {
+function websiteNode(siteUrl: string): JsonLdNode {
   return {
     "@type": "WebSite",
-    "@id": `${SITE.siteUrl}/#website`,
+    "@id": `${siteUrl}/#website`,
     name: SITE.fullName,
-    url: SITE.siteUrl,
-    publisher: { "@id": organizationId },
+    url: siteUrl,
+    publisher: { "@id": `${siteUrl}/#organization` },
   }
 }
 
-function softwareNode(url: string): JsonLdNode {
+function softwareNode(url: string, siteUrl: string): JsonLdNode {
   return {
     "@type": "SoftwareApplication",
     name: "NexaX ERP",
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
     url,
-    provider: { "@id": organizationId },
+    provider: { "@id": `${siteUrl}/#organization` },
   }
 }
 
@@ -61,17 +59,18 @@ export function usePageSeo(options: {
   page: "home" | "erp"
 }) {
   const { locale } = useLocale()
+  const siteUrl = useSiteUrl()
   const pageUrl = computed(() => {
     if (options.page === "home") {
-      return locale.value === "my" ? `${SITE.siteUrl}/my` : `${SITE.siteUrl}/`
+      return locale.value === "my" ? `${siteUrl.value}/my` : `${siteUrl.value}/`
     }
-    return locale.value === "my" ? `${SITE.siteUrl}/my/erp` : `${SITE.siteUrl}/erp`
+    return locale.value === "my" ? `${siteUrl.value}/my/erp` : `${siteUrl.value}/erp`
   })
-  const imageUrl = `${SITE.siteUrl}${OG_IMAGE_PATH}`
+  const imageUrl = computed(() => `${siteUrl.value}${OG_IMAGE_PATH}`)
   const graph = computed(() => (
     options.page === "home"
-      ? [organizationNode(), websiteNode()]
-      : [organizationNode(), softwareNode(pageUrl.value)]
+      ? [organizationNode(siteUrl.value), websiteNode(siteUrl.value)]
+      : [organizationNode(siteUrl.value), softwareNode(pageUrl.value, siteUrl.value)]
   ))
 
   useSeoMeta({

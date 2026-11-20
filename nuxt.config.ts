@@ -14,13 +14,17 @@ export default defineNuxtConfig({
   ],
   ssr: true,
   runtimeConfig: {
+    // Server-only. Override with NUXT_RESEND_* only.
+    // Defaults are empty so staging never inherits production credentials.
     resendApiKey: "",
     resendFrom: "",
-    resendTo: SITE.contactEmail,
+    resendTo: "",
     public: {
+      // Production defaults when env is unset. Staging Cloud Run MUST set:
+      // NUXT_PUBLIC_SITE_URL=https://staging.nexaxtech.com
+      // NUXT_PUBLIC_GTM_ID=   (empty string disables GTM; do not omit)
+      // Configure those BEFORE the first CI deploy (see docs/DEPLOYMENT.md).
       siteUrl: SITE.siteUrl,
-      // Official container for www.nexaxtech.com. Override with NUXT_PUBLIC_GTM_ID.
-      // An empty or invalid value omits the snippet.
       gtmId: "GTM-PQP878R2",
     },
   },

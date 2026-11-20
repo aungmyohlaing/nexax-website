@@ -2,6 +2,7 @@ import assert from "node:assert/strict"
 import { describe, it } from "node:test"
 import {
   CANONICAL_ORIGIN,
+  STAGING_ORIGIN,
   canonicalUrl,
   hreflangAlternates,
   localeFromPath,
@@ -44,13 +45,19 @@ describe("pairedLocalePath", () => {
 })
 
 describe("canonicalUrl", () => {
-  it("matches the four indexable URLs", () => {
+  it("matches the four indexable URLs on the production origin by default", () => {
     assert.equal(canonicalUrl("/"), `${CANONICAL_ORIGIN}/`)
     assert.equal(canonicalUrl("/erp"), `${CANONICAL_ORIGIN}/erp`)
     assert.equal(canonicalUrl("/my"), `${CANONICAL_ORIGIN}/my`)
     assert.equal(canonicalUrl("/my/erp"), `${CANONICAL_ORIGIN}/my/erp`)
     assert.equal(canonicalUrl("/does-not-exist"), null)
     assert.equal(canonicalUrl("/my/does-not-exist"), null)
+  })
+
+  it("accepts a staging origin override", () => {
+    assert.equal(canonicalUrl("/", STAGING_ORIGIN), `${STAGING_ORIGIN}/`)
+    assert.equal(canonicalUrl("/erp", STAGING_ORIGIN), `${STAGING_ORIGIN}/erp`)
+    assert.equal(canonicalUrl("/my/erp", STAGING_ORIGIN), `${STAGING_ORIGIN}/my/erp`)
   })
 })
 
@@ -71,5 +78,13 @@ describe("hreflangAlternates", () => {
     ])
     assert.equal(pageKind("/my/erp"), "erp")
     assert.equal(pageKind("/my"), "home")
+  })
+
+  it("builds staging alternates from the staging origin", () => {
+    assert.deepEqual(hreflangAlternates("home", STAGING_ORIGIN), [
+      { hreflang: "en", href: `${STAGING_ORIGIN}/` },
+      { hreflang: "my", href: `${STAGING_ORIGIN}/my` },
+      { hreflang: "x-default", href: `${STAGING_ORIGIN}/` },
+    ])
   })
 })

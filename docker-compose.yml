@@ -17,8 +17,10 @@ services:
       - "${WEBSITE_PORT:-3002}:8080"
 
     environment:
-      RESEND_API_KEY: ${RESEND_API_KEY:-}
-      RESEND_FROM: ${RESEND_FROM:-}
-      RESEND_TO: ${RESEND_TO:-}
+      NUXT_PUBLIC_SITE_URL: ${NUXT_PUBLIC_SITE_URL:-http://localhost:3002}
+      NUXT_PUBLIC_GTM_ID: ${NUXT_PUBLIC_GTM_ID:-}
+      NUXT_RESEND_API_KEY: ${NUXT_RESEND_API_KEY:-}
+      NUXT_RESEND_FROM: ${NUXT_RESEND_FROM:-}
+      NUXT_RESEND_TO: ${NUXT_RESEND_TO:-}
 
     restart: unless-stopped

@@ -1,5 +1,8 @@
-/** Public canonical origin. Kept in sync with constants/site.ts. */
+/** Production public canonical origin. Default for SEO helpers and tests. */
 export const CANONICAL_ORIGIN = "https://www.nexaxtech.com"
+
+/** Staging public origin (for tests and documentation). */
+export const STAGING_ORIGIN = "https://staging.nexaxtech.com"
 
 /**
  * Drop a trailing slash, query, and hash. `/` stays `/`.
@@ -56,31 +59,33 @@ export const pairedLocalePath = (path, next) => {
 /**
  * Absolute canonical URL for a localized public page, or null.
  * @param {string} path
+ * @param {string} [origin] public site origin (defaults to production)
  */
-export const canonicalUrl = (path) => {
+export const canonicalUrl = (path, origin = CANONICAL_ORIGIN) => {
   const kind = pageKind(path)
   if (!kind) return null
   if (kind === "home") {
-    return localeFromPath(path) === "my" ? `${CANONICAL_ORIGIN}/my` : `${CANONICAL_ORIGIN}/`
+    return localeFromPath(path) === "my" ? `${origin}/my` : `${origin}/`
   }
-  return localeFromPath(path) === "my" ? `${CANONICAL_ORIGIN}/my/erp` : `${CANONICAL_ORIGIN}/erp`
+  return localeFromPath(path) === "my" ? `${origin}/my/erp` : `${origin}/erp`
 }
 
 /**
  * Reciprocal alternates. ERP `x-default` is the English homepage, as specified.
  * @param {"home" | "erp"} kind
+ * @param {string} [origin] public site origin (defaults to production)
  */
-export const hreflangAlternates = (kind) => {
+export const hreflangAlternates = (kind, origin = CANONICAL_ORIGIN) => {
   if (kind === "erp") {
     return [
-      { hreflang: "en", href: `${CANONICAL_ORIGIN}/erp` },
-      { hreflang: "my", href: `${CANONICAL_ORIGIN}/my/erp` },
-      { hreflang: "x-default", href: `${CANONICAL_ORIGIN}/` },
+      { hreflang: "en", href: `${origin}/erp` },
+      { hreflang: "my", href: `${origin}/my/erp` },
+      { hreflang: "x-default", href: `${origin}/` },
     ]
   }
   return [
-    { hreflang: "en", href: `${CANONICAL_ORIGIN}/` },
-    { hreflang: "my", href: `${CANONICAL_ORIGIN}/my` },
-    { hreflang: "x-default", href: `${CANONICAL_ORIGIN}/` },
+    { hreflang: "en", href: `${origin}/` },
+    { hreflang: "my", href: `${origin}/my` },
+    { hreflang: "x-default", href: `${origin}/` },
   ]
 }

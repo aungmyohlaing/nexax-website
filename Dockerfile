@@ -3,15 +3,17 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
 RUN npm config set fetch-retries 5 \
   && npm config set fetch-retry-mintimeout 20000 \
   && npm config set fetch-retry-maxtimeout 120000 \
-  && npm install --no-audit --no-fund
+  && npm ci --no-audit --no-fund
 
 COPY . .
 
+# Do not copy .env into the image. Runtime config comes from Cloud Run /
+# Secret Manager. A local .env is gitignored and should not be present in CI.
 RUN npm run build
 
 
