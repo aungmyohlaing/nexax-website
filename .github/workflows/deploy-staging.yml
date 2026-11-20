@@ -1,0 +1,221 @@
+# Deploy the NexaX website to staging (nexax-erp-staging).
+# Never targets production. Triggered by pushes to `staging` or manual run
+# from refs/heads/staging only.
+#
+# Prerequisites (one-time, BEFORE first CI deploy): GCP resources, WIF,
+# GitHub Environment `staging` (deployment branch = staging), and Cloud Run
+# service with public env + Secret Manager bindings — see docs/DEPLOYMENT.md.
+# This workflow only builds, pushes, and updates the Cloud Run image.
+
+name: Deploy Staging
+
+on:
+  push:
+    branches:
+      - staging
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  IMAGE_NAME: nexax-website
+  EXPECTED_REF: refs/heads/staging
+  EXPECTED_PROJECT_ID: nexax-erp-staging
+  EXPECTED_REGION: asia-southeast1
+  EXPECTED_SERVICE: nexax-website-staging
+  EXPECTED_SITE_HOST: staging.nexaxtech.com
+  PRODUCTION_GTM_ID: GTM-PQP878R2
+
+jobs:
+  deploy:
+    name: Build and deploy staging
+    runs-on: ubuntu-latest
+    environment: staging
+    timeout-minutes: 30
+
+    steps:
+      - name: Validate git ref
+        run: |
+          set -euo pipefail
+          echo "github.ref=${GITHUB_REF}"
+          if [[ "${GITHUB_REF}" != "${EXPECTED_REF}" ]]; then
+            echo "Ref ${GITHUB_REF} is not allowed. Staging deploys require ${EXPECTED_REF}." >&2
+            exit 1
+          fi
+
+      - name: Validate deployment targets
+        env:
+          GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+          GCP_REGION: ${{ vars.GCP_REGION }}
+          CLOUD_RUN_SERVICE: ${{ vars.CLOUD_RUN_SERVICE }}
+          ARTIFACT_REGISTRY_REPOSITORY: ${{ vars.ARTIFACT_REGISTRY_REPOSITORY }}
+        run: |
+          set -euo pipefail
+          fail=0
+          require_eq() {
+            local name="$1" actual="$2" expected="$3"
+            if [[ "${actual}" != "${expected}" ]]; then
+              echo "${name}='${actual}' does not match required '${expected}'" >&2
+              fail=1
+            fi
+          }
+          require_eq "GCP_PROJECT_ID" "${GCP_PROJECT_ID}" "${EXPECTED_PROJECT_ID}"
+          require_eq "GCP_REGION" "${GCP_REGION}" "${EXPECTED_REGION}"
+          require_eq "CLOUD_RUN_SERVICE" "${CLOUD_RUN_SERVICE}" "${EXPECTED_SERVICE}"
+          require_eq "ARTIFACT_REGISTRY_REPOSITORY" "${ARTIFACT_REGISTRY_REPOSITORY}" "website"
+          if [[ "${fail}" -ne 0 ]]; then
+            exit 1
+          fi
+
+      - name: Checkout
+        # actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Authenticate to Google Cloud (WIF)
+        # google-github-actions/auth@v2.1.13
+        uses: google-github-actions/auth@c200f3691d83b41bf9bbd8638997a462592937ed
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOYER_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        # google-github-actions/setup-gcloud@v2.2.1
+        uses: google-github-actions/setup-gcloud@e427ad8a34f8676edf47cf7d7925499adf3eb74f
+
+      - name: Require existing Cloud Run service
+        env:
+          SERVICE: ${{ vars.CLOUD_RUN_SERVICE }}
+          REGION: ${{ vars.GCP_REGION }}
+          PROJECT: ${{ vars.GCP_PROJECT_ID }}
+        run: |
+          set -euo pipefail
+          if ! gcloud run services describe "${SERVICE}" \
+            --project="${PROJECT}" \
+            --region="${REGION}" \
+            --format='value(metadata.name)' >/dev/null; then
+            echo "Cloud Run service ${SERVICE} does not exist in ${PROJECT}/${REGION}." >&2
+            echo "Create it once with env/secrets/runtime SA before CI deploy. See docs/DEPLOYMENT.md." >&2
+            exit 1
+          fi
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker "${{ vars.GCP_REGION }}-docker.pkg.dev" --quiet
+
+      - name: Resolve image tag
+        id: meta
+        run: |
+          SHA="${GITHUB_SHA}"
+          REGISTRY="${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.ARTIFACT_REGISTRY_REPOSITORY }}"
+          IMAGE="${REGISTRY}/${IMAGE_NAME}:${SHA}"
+          echo "sha=${SHA}" >> "$GITHUB_OUTPUT"
+          echo "image=${IMAGE}" >> "$GITHUB_OUTPUT"
+          echo "Deploying image: ${IMAGE}"
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            --tag "${{ steps.meta.outputs.image }}" \
+            --label "org.opencontainers.image.revision=${{ steps.meta.outputs.sha }}" \
+            --label "org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}" \
+            .
+
+      - name: Push Docker image
+        run: docker push "${{ steps.meta.outputs.image }}"
+
+      - name: Deploy image to Cloud Run
+        id: deploy
+        # google-github-actions/deploy-cloudrun@v2.7.6
+        uses: google-github-actions/deploy-cloudrun@251330ba9a8a34bfbc1622895f42e1d53fd14522
+        with:
+          service: ${{ vars.CLOUD_RUN_SERVICE }}
+          image: ${{ steps.meta.outputs.image }}
+          region: ${{ vars.GCP_REGION }}
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+
+      - name: Verify deployment health
+        env:
+          SERVICE: ${{ vars.CLOUD_RUN_SERVICE }}
+          REGION: ${{ vars.GCP_REGION }}
+          PROJECT: ${{ vars.GCP_PROJECT_ID }}
+          EXPECTED_IMAGE: ${{ steps.meta.outputs.image }}
+        run: |
+          set -euo pipefail
+
+          REVISION="$(gcloud run services describe "${SERVICE}" \
+            --project="${PROJECT}" \
+            --region="${REGION}" \
+            --format='value(status.latestReadyRevisionName)')"
+
+          SERVICE_URL="$(gcloud run services describe "${SERVICE}" \
+            --project="${PROJECT}" \
+            --region="${REGION}" \
+            --format='value(status.url)')"
+
+          DEPLOYED_IMAGE="$(gcloud run services describe "${SERVICE}" \
+            --project="${PROJECT}" \
+            --region="${REGION}" \
+            --format='value(spec.template.spec.containers[0].image)')"
+
+          echo "Latest ready revision: ${REVISION}"
+          echo "Service URL: ${SERVICE_URL}"
+          echo "Deployed container image: ${DEPLOYED_IMAGE}"
+
+          if [[ "${DEPLOYED_IMAGE}" != "${EXPECTED_IMAGE}" ]]; then
+            echo "Deployed image does not match the workflow build" >&2
+            exit 1
+          fi
+
+          HTTP_STATUS="$(curl -sS -o /tmp/health-body.html -w '%{http_code}' \
+            --max-time 30 \
+            --retry 5 \
+            --retry-delay 3 \
+            --retry-all-errors \
+            "${SERVICE_URL}/")"
+
+          echo "Health HTTP status: ${HTTP_STATUS}"
+          if [[ "${HTTP_STATUS}" != "200" ]]; then
+            echo "Health check failed" >&2
+            head -c 500 /tmp/health-body.html >&2 || true
+            exit 1
+          fi
+
+          if grep -F "${PRODUCTION_GTM_ID}" /tmp/health-body.html >/dev/null; then
+            echo "Staging HTML contains production GTM ID ${PRODUCTION_GTM_ID}." >&2
+            echo "Set NUXT_PUBLIC_GTM_ID to empty on the Cloud Run service before deploy." >&2
+            exit 1
+          fi
+
+          if ! grep -F "${EXPECTED_SITE_HOST}" /tmp/health-body.html >/dev/null; then
+            echo "Staging HTML does not contain canonical host ${EXPECTED_SITE_HOST}." >&2
+            echo "Set NUXT_PUBLIC_SITE_URL=https://${EXPECTED_SITE_HOST} on Cloud Run before deploy." >&2
+            exit 1
+          fi
+
+          if grep -Ei 'https://www\.nexaxtech\.com' /tmp/health-body.html >/dev/null; then
+            echo "Staging HTML still references https://www.nexaxtech.com" >&2
+            exit 1
+          fi
+
+          REDIRECT_HEADERS="$(curl -sSI --max-time 30 "${SERVICE_URL}/erp/")"
+          echo "${REDIRECT_HEADERS}"
+          if echo "${REDIRECT_HEADERS}" | grep -Ei '^location:[[:space:]]*https://www\.nexaxtech\.com' >/dev/null; then
+            echo "Trailing-slash redirect targets production www" >&2
+            exit 1
+          fi
+
+          {
+            echo "## Staging deployment"
+            echo ""
+            echo "- Project: \`${PROJECT}\`"
+            echo "- Service: \`${SERVICE}\`"
+            echo "- Revision: \`${REVISION}\`"
+            echo "- Image: \`${EXPECTED_IMAGE}\`"
+            echo "- URL: ${SERVICE_URL}"
+            echo "- Checks: HTTP 200, no production GTM, staging host in HTML, no www redirect"
+          } >> "${GITHUB_STEP_SUMMARY}"

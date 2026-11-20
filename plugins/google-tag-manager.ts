@@ -1,15 +1,16 @@
-const GTM_ID_PATTERN = /^GTM-[A-Z0-9]+$/
+import { isValidGtmId } from "~/utils/gtm.mjs"
 
 /**
  * Official Google Tag Manager install, rendered into the initial HTML.
  * No GA4 tag is added here; tags stay in the GTM container.
+ * Empty or invalid NUXT_PUBLIC_GTM_ID omits the snippet (staging default).
  */
 export default defineNuxtPlugin({
   name: "google-tag-manager",
   enforce: "pre",
   setup() {
     const configuredId = String(useRuntimeConfig().public.gtmId ?? "").trim()
-    if (!GTM_ID_PATTERN.test(configuredId)) return
+    if (!isValidGtmId(configuredId)) return
 
     useHead({
       script: [

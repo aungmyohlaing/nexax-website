@@ -1,7 +1,10 @@
 export const SITE = {
   name: "NexaXTech",
   fullName: "NexaX Technologies",
+  /** Production default. Prefer `runtimeConfig.public.siteUrl` at runtime. */
   siteUrl: "https://www.nexaxtech.com",
+  /** Staging public origin. Set via `NUXT_PUBLIC_SITE_URL` on Cloud Run. */
+  stagingSiteUrl: "https://staging.nexaxtech.com",
   logoUrl: "/brand/nexax_icon.png",
   contactEmail: "amhlaing@gmail.com",
   phone: "+959449546778",
